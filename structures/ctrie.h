@@ -1,7 +1,9 @@
 #ifndef __CTRIE_H__
 #define __CTRIE_H__
 
-#define TAM_ALFABETO 26 // Definimos como constante global el tamanio del alfabeto
+
+#define TAM_ALFABETO 26 // Definimos el tamanio del alfabeto
+#define OFFSET (int)('a') // Definimos el valor ASCII de el caracter 'a'
 
 
 typedef struct _CTrie_Nodo {

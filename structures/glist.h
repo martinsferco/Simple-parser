@@ -58,6 +58,6 @@ void* glist_first_element(GList list, CopyFunction copy);
 /**
  * Recorre la lista, aplicando la funcion visitante a cada uno de los elementos.
 */
-void* glist_iterate(GList lista, FuncionVisitante visitante);
+void* glist_iterate(GList lista, VisitFunction visitante);
 
 #endif

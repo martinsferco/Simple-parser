@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdio.h>
 
-#define OFFSET (int)('a') // Define the ofset of the ASCII of 'a'
 
 
 CTrie ctrie_crear() { return NULL; }
