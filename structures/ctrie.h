@@ -13,9 +13,17 @@ typedef struct _CTrie_Nodo {
   unsigned int fin_cadena; // Vemos si llegamos hasta un fin de cadena
   unsigned int comienzo_cadena; // Vemos si es el comienzo de una cadena
 
-  struct _CTrie_Nodo* hijos[TAM_ALFABETO]; // Hijos del nodo
+  struct _CTrie_Nodo** hijos; // Hijos del nodo
 
 } CTrie_Nodo;
+
+
+typedef enum {
+
+  COPIA_FISICA,
+  COPIA_PUNTERO,
+
+} OpcionCopiado;
 
 
 

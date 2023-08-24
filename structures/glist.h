@@ -3,22 +3,22 @@
 
 // TODO: Agregar una interfaz de alto nivel
 
-typedef void (*FuncionDestructora) (void*);
-typedef void* (*FuncionCopia) (void*);
-typedef void (*FuncionVisitante) (void*);
+typedef void (*DestroyFunction) (void*);
+typedef void* (*CopyFunction) (void*);
+typedef void (*VisitFunction) (void*);
 
 typedef struct _GNode {
 
-  void* dato;
-  struct _GNode* sig;
+  void* data;
+  struct _GNode* next;
 
 } GNode;
 
 
 typedef struct {
 
-  GNode* primero;
-  GNode* ultimo;
+  GNode* first;
+  GNode* last;
 
 } GList;
 
@@ -26,38 +26,38 @@ typedef struct {
 /**
  * Devuelve una lista vacia.
 */
-GList glist_crear();
+GList glist_create();
 
 /**
  * Destruye la lista.
 */
-void glist_destruir(GList lista, FuncionDestructora destruir);
+void glist_destroy(GList list, DestroyFunction destroy);
 
 /**
  * Determina si la lista esta vacia.
 */
-int glist_vacia(GList lista);
+int glist_empty(GList list);
 
 /**
  * Agrega un elemento al comienzo de la lista.
 */
-GList glist_agregar_final(GList lista, void* dato, FuncionCopia copiar);
+GList glist_add_end(GList list, void* data, CopyFunction copy);
 
 /**
  * Elimina el ultimo elemento de la lista.
 */
-GList glist_eliminar_inicio(GList lista, FuncionDestructora destruir);
+GList glist_remove_first(GList list, DestroyFunction destroy);
 
 /**
  * Nos devuleve el primer elemento de la lista. No queda determinado el 
  * comportamiento si la lista esta vacia.
 */
-void* glist_primer_elemento(GList lista, FuncionCopia copiar);
+void* glist_first_element(GList list, CopyFunction copy);
 
 
 /**
  * Recorre la lista, aplicando la funcion visitante a cada uno de los elementos.
 */
-void* glist_recorrer(GList lista, FuncionVisitante visitante);
+void* glist_iterate(GList lista, FuncionVisitante visitante);
 
 #endif

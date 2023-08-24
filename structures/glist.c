@@ -3,90 +3,90 @@
 
 
 
-GList glist_crear() {
+GList glist_create() {
 
-  GList nueva_lista;
+  GList new_list;
 
-  nueva_lista.primero = NULL;
-  nueva_lista.ultimo = NULL;
+  new_list.first = NULL;
+  new_list.last = NULL;
 
-  return nueva_lista;
+  return new_list;
 }
 
 
-void glist_destruir(GList lista, FuncionDestructora destruir) {
+void glist_destroy(GList list, DestroyFunction destroy) {
 
-  GNode* nodo_eliminado;
+  GNode* remove_node;
 
-  GNode* temp = lista.primero;
+  GNode* temp = list.first;
 
   while (temp != NULL) {
 
-    nodo_eliminado = temp;
-    temp = temp->sig;
-    destruir(nodo_eliminado->dato);
-    free(nodo_eliminado);
+    remove_node = temp;
+    temp = temp->next;
+    destruir(remove_node->data);
+    free(remove_node);
   }
 }
 
 
 
-int glist_vacia(GList list) { return (list.primero == NULL); }
+int glist_empty(GList list) { return (list.first == NULL); }
 
 
 
-GList glist_agregar_final(GList lista, void* dato, FuncionCopia copiar) {
+GList glist_add_last(GList list, void* data, CopyFunction copy) {
 
-  GNode* nuevo_nodo = malloc(sizeof(GNode));
-  nuevo_nodo->dato = copiar(dato);
+  GNode* new_node = malloc(sizeof(GNode));
+  new_node->data = copy(data);
 
-  if (glist_vacia(lista)) {
+  if (glist_empty(list)) {
 
-    nuevo_nodo->sig = NULL;
-    lista.primero = nuevo_nodo;
-    lista.ultimo = nuevo_nodo;
+    new_node->next = NULL;
+    list.first = new_node;
+    list.last = new_node;
   }
 
   else {
 
-    nuevo_nodo->sig = NULL;
-    lista.ultimo->sig = nuevo_nodo;
-    lista.ultimo = nuevo_nodo;
+    new_node->next = NULL;
+    list.last->next = new_node;
+    list.last = new_node;
   }
 
-  return lista;
+  return list;
 }
 
 
 
-GList glist_eliminar_inicio(GList lista, FuncionDestructora destruir) {
+GList glist_remove_first(GList list, DestroyFunction destroy) {
 
-  if (glist_vacia(lista)) return lista;
+  if (glist_empty(list)) return list;
 
-  GNode* nuevo_comienzo = lista.primero->sig;
+  GNode* new_start = list.first->next;
 
-  // Liberamos el primero nodo
-  destruir(lista.primero->dato);
-  free(lista.primero);
+  // Liberamos el primer nodo
+  destruir(list.first->data);
+  free(list.first);
 
-  lista.primero = nuevo_comienzo;
+  list.first = new_start;
 
-  return lista;
+  return list;
 }
 
 
 
-void* glist_primer_elemento(GList lista, FuncionCopia copiar) {
+void* glist_first_element(GList list, CopyFunction copy) {
 
-  return glist_vacia(lista) ? NULL : copiar(lista.primero->dato);
+  return glist_vacia(list) ? NULL : copy(list.first->data);
 }
 
 
 
-void* glist_recorrer(GList lista, FuncionVisitante visitante) {
+void* glist_recorrer(GList list, VisitFunction visit) {
 
-  for (GNode* temp = lista.primero ; temp != NULL ; temp->sig)
-    visitante(temp->dato);
+  for (GNode* temp = list.first ; temp != NULL ; temp->next)
+    visit(temp->data);
 }
 
 
