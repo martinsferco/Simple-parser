@@ -6,8 +6,6 @@
 typedef void (*FuncionDestructora) (void*);
 typedef void* (*FuncionCopia) (void*);
 typedef void (*FuncionVisitante) (void*);
-typedef int (*Predicado) (void*);
-
 
 typedef struct _GNode {
 
@@ -55,5 +53,11 @@ GList glist_eliminar_inicio(GList lista, FuncionDestructora destruir);
  * comportamiento si la lista esta vacia.
 */
 void* glist_primer_elemento(GList lista, FuncionCopia copiar);
+
+
+/**
+ * Recorre la lista, aplicando la funcion visitante a cada uno de los elementos.
+*/
+void* glist_recorrer(GList lista, FuncionVisitante visitante);
 
 #endif

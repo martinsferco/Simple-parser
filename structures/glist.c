@@ -29,6 +29,8 @@ void glist_destruir(GList lista, FuncionDestructora destruir) {
   }
 }
 
+
+
 int glist_vacia(GList list) { return (list.primero == NULL); }
 
 
@@ -55,6 +57,8 @@ GList glist_agregar_final(GList lista, void* dato, FuncionCopia copiar) {
   return lista;
 }
 
+
+
 GList glist_eliminar_inicio(GList lista, FuncionDestructora destruir) {
 
   if (glist_vacia(lista)) return lista;
@@ -71,8 +75,20 @@ GList glist_eliminar_inicio(GList lista, FuncionDestructora destruir) {
 }
 
 
+
 void* glist_primer_elemento(GList lista, FuncionCopia copiar) {
 
   return glist_vacia(lista) ? NULL : copiar(lista.primero->dato);
 }
+
+
+
+void* glist_recorrer(GList lista, FuncionVisitante visitante) {
+
+  for (GNode* temp = lista.primero ; temp != NULL ; temp->sig)
+    visitante(temp->dato);
+}
+
+
+
 
