@@ -6,61 +6,63 @@
 #define OFFSET (int)('a') // Definimos el valor ASCII de el caracter 'a'
 
 
-typedef struct _CTrie_Nodo {
+typedef struct _CTrie_Node { // Estructura del nodo de nuestro CTrie
 
-  char* cadena;
+  char* string;
 
-  int largo_cadena; // Largo de la cadena
+  int length; // Largo de la cadena
 
-  unsigned int fin_cadena; // Vemos si llegamos hasta un fin de cadena
-  unsigned int comienzo_cadena; // Vemos si es el comienzo de una cadena
+  unsigned int end_of_word; // Vemos si llegamos hasta un fin de cadena
 
-  struct _CTrie_Nodo** hijos; // Hijos del nodo
+  unsigned int start_block; // Vemos si en el nodo, 'string' apunta al comienzo
+                            // de un bloque de memoria 
 
-} CTrie_Nodo;
+  struct _CTrie_Node** childs; // Hijos del nodo
 
-
-typedef enum {
-
-  COPIA_FISICA,
-  COPIA_PUNTERO,
-
-} OpcionCopiado;
+} CTrie_Node;
 
 
+typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
 
-typedef CTrie_Nodo* CTrie; // Definimos el tipo CTrie
+  PHYSIC_COPY,
+  POINTER_COPY,
+
+} CopyOption;
+
+
+typedef CTrie_NodE* CTrie; // Definimos el tipo CTrie
 
 
 /**
  * Crea un CTrie vacio.
 */
-CTrie ctrie_crear();
+CTrie ctrie_create();
 
 
 /**
  * Determina si el CTrie esta vacio.
 */
-int ctrie_vacio(CTrie ctrie);
+int ctrie_empty(CTrie ctrie);
 
 
 /**
  * Dada una cadena, se encarga de insertarla en el CTrie.
 */
-CTrie ctrie_agregar_cadena(CTrie ctrie, char* cadena);
+CTrie ctrie_add_string(CTrie ctrie, char* string);
 
 
 /**
  * Destruye el CTrie pasado como argumento.
 */
-void ctrie_destruir(CTrie ctrie);
+void ctrie_destroy(CTrie ctrie);
+
 
 /**
  * Recorre el ctrie, en un orden dado, mostrando las cadenas de cada
  * uno de los nodos. Consideramos que se procesa el nodo, y luego se recorren
  * los subarboles de izquierda a derecha.
 */
-void ctrie_recorrer(CTrie ctrie);
+void ctrie_iterate(CTrie ctrie);
 
 
-#endif
+#endif // __CTRIE_H__
