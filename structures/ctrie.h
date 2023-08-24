@@ -2,7 +2,7 @@
 #define __CTRIE_H__
 
 
-#define TAM_ALFABETO 26 // Definimos el tamanio del alfabeto
+#define ALPHABET_SIZE 26 // Definimos el tamanio del alfabeto
 #define OFFSET (int)('a') // Definimos el valor ASCII de el caracter 'a'
 
 
@@ -14,8 +14,8 @@ typedef struct _CTrie_Node { // Estructura del nodo de nuestro CTrie
 
   unsigned int end_of_word; // Vemos si llegamos hasta un fin de cadena
 
-  unsigned int start_block; // Vemos si en el nodo, 'string' apunta al comienzo
-                            // de un bloque de memoria 
+  unsigned int start_memory_block; // Vemos si en el nodo, 'string' apunta al 
+                                   // comienzo de un bloque de memoria 
 
   struct _CTrie_Node** childs; // Hijos del nodo
 
@@ -30,7 +30,7 @@ typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
 } CopyOption;
 
 
-typedef CTrie_NodE* CTrie; // Definimos el tipo CTrie
+typedef CTrie_Node* CTrie; // Definimos el tipo CTrie
 
 
 /**

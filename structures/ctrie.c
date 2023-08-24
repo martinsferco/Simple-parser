@@ -5,163 +5,159 @@
 
 
 
-CTrie ctrie_crear() { return NULL; }
+CTrie ctrie_create() { return NULL; }
 
 
 
-static CTrie ctrie_create_node(char* cadena, int largo) { // Agregar un argumento para ver si copiamos o solamente dejamos el puntero
+static CTrie ctrie_create_node(char* string, int length, CopyOption option) { 
 
-  CTrie new_node = malloc(sizeof(CTrie_Nodo));
+  CTrie new_node = malloc(sizeof(CTrie_Node));
+
+  new_node->string = malloc(sizeof(char) * (length + 1));
+
+
+  if (option == POINTER_COPY) new_node->string = string;
+
+  else strcpy(new_node->string, string);  
   
-  int length = largo;
-
-  new_node->cadena = malloc(sizeof(char) * (length + 1));
   
-  strcpy(new_node->cadena, cadena); // Modificar strcpy con algo que copia a mano
-  
-  new_node->largo_cadena = length;
+  new_node->length = length;
 
-  new_node->comienzo_cadena = 0;
-  new_node->fin_cadena = 1;
+  new_node->start_memory_block = 0;
+  new_node->end_of_word = 0;
 
-  // Initialize all children to NULL
-  new_node->hijos = malloc(sizeof(CTrie) * TAM_ALFABETO);
+  // Inicializamos todos sus hijos a NULL
+  new_node->childs = malloc(sizeof(CTrie) * ALPHABET_SIZE);
 
-  for (int i = 0 ; i < TAM_ALFABETO ; new_node->hijos[i++] = NULL);
+  for (int i = 0 ; i < ALPHABET_SIZE; new_node->childs[i++] = NULL);
 
   return new_node;
 }
 
-
-
-CTrie ctrie_agregar_cadena(CTrie ctrie, char* cadena) {
-
-  if (cadena == NULL) return ctrie;
-
-
-  if (ctrie_vacio(ctrie))  // If the ctrie is empty, add the string normaly 
-
-    return ctrie_create_node(cadena, strlen(cadena));
+static CTrie ctrie_extend_node(CTrie ctrie, char* string) {}
 
 
 
-  // If the CTrie isn't empty
+static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string) {}
+
+
+
+CTrie ctrie_add_string(CTrie ctrie, char* string) {
+
+  if (string == NULL) return ctrie; 
+
+
+  if (ctrie_empty(ctrie))  // Si el CTrie esta vacio, agregamos la cadena
+                           // a un nuevo nodo
+
+    return ctrie_create_node(string, strlen(string), PHYSIC_COPY);
+
+
+
+  // Si el CTrie no esta vacio, tenemos que recorrer el string del nodo
   int i;
 
   // Recorremos hasta que no matcheen o lleguemos al final de alguna cadena
-  for (i = 0 ; ctrie->cadena[i] == cadena[i] && cadena[i] != '\0' && i < ctrie->largo_cadena ; i++);
+  for (i = 0 ; ctrie->string[i] == string[i] && string[i] != '\0' && i < ctrie->length ; i++);
 
-  // CASE 1: The word is of the same size, and have matched all the chars before
-  if (cadena[i] == '\0' && i == ctrie->largo_cadena) {
 
-    if (! ctrie->fin_cadena) ctrie->fin_cadena = 1;
+  // CASO 1: La palabra y el string del nodo coinciden en largo y caracteres
+  if (string[i] == '\0' && i == ctrie->length) {
 
-    return ctrie;
+    // Marcamos como fin de palabra, si antes no lo era
+    if (! ctrie->end_of_word) ctrie->end_of_word = 1;
   }
   
-  
-  
-  // CASE 2: The word is smaller and have matched all the chars before
-  if (cadena[i] == '\0') {
+  // CASO 2: La palabra es mas chica que el string del nodo y coincidio en todo // TODO MODULARIZAR
+  else if (string[i] == '\0') {
 
-    CTrie new_node = ctrie_create_node(ctrie->cadena + i, ctrie->largo_cadena - i);
-    ctrie->largo_cadena = i; // Actualizamos largo cadena
+    
+    CTrie new_node = ctrie_create_node(ctrie->string + i, ctrie->length - i, POINTER_COPY); // TODO CORREGIR
+    ctrie->length = i; // Actualizamos largo cadena
 
-    new_node->fin_cadena = 1;
+    new_node->end_of_word= 1;
     
 
-    CTrie* change = new_node->hijos;
-    new_node->hijos = ctrie->hijos;
-    ctrie->hijos = change;
+    CTrie* change = new_node->childs;
+    new_node->childs = ctrie->childs;
+    ctrie->childs= change;
 
 
 
-    ctrie->hijos[(int)(ctrie->cadena[i]) - OFFSET] = new_node; // Agregar opcion de copiar, o no copiar
+    ctrie->childs[(int)(ctrie->string[i]) - OFFSET] = new_node; // Agregar opcion de copiar, o no copiar
     
-    return ctrie;
   }
 
-  // CASE 3: The word is bigger and have matched all the chars before
-  if (i == ctrie->largo_cadena) {
+  // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 
+  else if (i == ctrie->length) {
 
-    CTrie new_child =  ctrie_agregar_cadena(ctrie->hijos[(int)cadena[i] - OFFSET], cadena + i);
+    CTrie new_child =  ctrie_add_string(ctrie->childs[(int)string[i] - OFFSET], string + i);
 
-    ctrie->hijos[(int)cadena[i] - 97] = new_child;
+    ctrie->childs[(int)string[i] - 97] = new_child;
 
-    return ctrie;
   }
 
-  // CASE 4: The word fails matching a char 
-  if (ctrie->cadena[i] != cadena[i]) {
+  // CASO 4: La palabra no coincide en algun caracter con el string del nodo // TODO MODULARIZAR
+  else if (ctrie->string[i] != string[i]) {
     
-    CTrie nuevo_nodo1 = ctrie_create_node(ctrie->cadena + i, ctrie->largo_cadena - i);
+    CTrie nuevo_nodo1 = ctrie_create_node(ctrie->string + i, ctrie->length - i, POINTER_COPY); //TODO CORREGIR
 
-    ctrie->largo_cadena = i;
+    ctrie->length = i;
 
-    CTrie* change = ctrie->hijos;
+    CTrie* change = ctrie->childs;
 
-    ctrie->hijos = nuevo_nodo1->hijos;
+    ctrie->childs = nuevo_nodo1->childs;
 
-    nuevo_nodo1->hijos = change;
+    nuevo_nodo1->childs = change;
 
-    ctrie->hijos[(int)ctrie->cadena[i] - OFFSET] = nuevo_nodo1;
+    ctrie->childs[(int)ctrie->string[i] - OFFSET] = nuevo_nodo1;
 
-    CTrie nuevo_nodo2 = ctrie_create_node(cadena + i, strlen(cadena) - i);
+    CTrie nuevo_nodo2 = ctrie_create_node(string + i, strlen(string) - i, POINTER_COPY); //TODO CORREGIR
 
-    ctrie->hijos[cadena[i] - OFFSET] = nuevo_nodo2;
-
-    return ctrie;
+    ctrie->childs[string[i] - OFFSET] = nuevo_nodo2;
   }
 
 
 
-
-
-
-
-  
   return ctrie;
-
 }
 
 
-int ctrie_vacio(CTrie ctrie) { return ctrie == NULL; }
+int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
 
 
-void ctrie_destruir(CTrie ctrie) {
+void ctrie_destroy(CTrie ctrie) {
 
-  if (! ctrie_vacio(ctrie)) {
+  if (! ctrie_empty(ctrie)) {
 
-    for (int i = 0 ; i < TAM_ALFABETO ; i++)
+    for (int i = 0 ; i < ALPHABET_SIZE ; i++)
       
-      if (! ctrie_vacio(ctrie->hijos[i])) ctrie_destruir(ctrie->hijos[i]);
+      // Liberamos cada uno de los hijos
+      if (! ctrie_empty(ctrie->childs[i])) ctrie_destroy(ctrie->childs[i]);
       
-    free(ctrie->hijos);
+    // Liberamos el arreglo de hijos
+    free(ctrie->childs);
 
+    // Liberamos la cadena, solo si el string es el comienzo del bloque
+    if (ctrie->start_memory_block) free(ctrie->string);   
 
-    if (ctrie->comienzo_cadena) free(ctrie->cadena); // Liberamos cadena  
-
-
-
-    free(ctrie); // Liberamos nodo
-
+    // Liberamos el nodo
+    free(ctrie);
   }
 }
 
 
 
-void ctrie_recorrer(CTrie ctrie) {
+void ctrie_iterate(CTrie ctrie) {
 
-  if (ctrie_vacio(ctrie)) return;
+  if (ctrie_empty(ctrie)) return;
 
-
-  printf("%d\n",ctrie->largo_cadena);
-  for (int i = 0 ; i < ctrie->largo_cadena ; i++)
-    printf("%c",ctrie->cadena[i]);
+  for (int i = 0 ; i < ctrie->length ; i++) // Imprimimos los caracteres del string
+    printf("%c",ctrie->string[i]);
 
   printf("\n");
 
-  for (int i = 0 ; i < TAM_ALFABETO ; i++) // Recorremos los hijos
-    
-    ctrie_recorrer(ctrie->hijos[i]);
+  for (int i = 0 ; i < ALPHABET_SIZE ; i++) // Visitamos los hijos
+
+    ctrie_iterate(ctrie->childs[i]);
 }
