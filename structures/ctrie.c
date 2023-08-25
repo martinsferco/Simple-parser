@@ -13,32 +13,110 @@ static CTrie ctrie_create_node(char* string, int length, CopyOption option) {
 
   CTrie new_node = malloc(sizeof(CTrie_Node));
 
-  new_node->string = malloc(sizeof(char) * (length + 1));
+  // Seteamos variables del bloque
+  new_node->start_memory_block = option == PHYSIC_COPY;
+  new_node->end_of_word = 1; // ? Creo que esto es correcto
 
-
-  if (option == POINTER_COPY) new_node->string = string;
-
-  else strcpy(new_node->string, string);  
-  
-  
   new_node->length = length;
 
-  new_node->start_memory_block = 0;
-  new_node->end_of_word = 0;
+  // Copiamos el string fisicamente, o solo guardamos su direccion
+  if (option == POINTER_COPY) new_node->string = string;
 
-  // Inicializamos todos sus hijos a NULL
+  else {
+    
+    new_node->string = malloc(sizeof(char) * (length + 1));
+    strcpy(new_node->string, string);  
+  }
+  
+  // Pedimos memoria para todos los hijos
   new_node->childs = malloc(sizeof(CTrie) * ALPHABET_SIZE);
 
-  for (int i = 0 ; i < ALPHABET_SIZE; new_node->childs[i++] = NULL);
+  // Inicializamos todos sus hijos a NULL
+  for (int i = 0 ; i < ALPHABET_SIZE; new_node->childs[i++] = ctrie_create());
 
   return new_node;
 }
 
-static CTrie ctrie_extend_node(CTrie ctrie, char* string) {}
+
+
+/**
+ * Dados dos CTrie, la funcion intercambia todos los hijos de uno por los hijos
+ * del otro y visceversa.
+*/
+static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
+
+  CTrie* childs = ctrie1->childs;
+  ctrie1->childs = ctrie2->childs;
+  ctrie2->childs = childs;
+}
 
 
 
-static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string) {}
+/**
+ * 
+*/
+static CTrie ctrie_extend_node(CTrie ctrie, char* string, int index) {
+
+  // Creamos el nodo que sera la extension del nodo actual
+  CTrie new_node = ctrie_create_node(ctrie->string + index, ctrie->length - index,
+                                                            POINTER_COPY); 
+  
+
+  ctrie->length = index; // Actualizamos largo string
+
+  new_node->end_of_word = ctrie->end_of_word; // Sera fin de palabra si la 
+                                              // origina lo era 
+  
+  ctrie->end_of_word = 1; // El nodo actual pasa a ser un fin de palabra
+
+  
+  ctrie_exchange_childs(new_node, ctrie); // Intercambiamos hijos
+  
+
+  // Lo ponemos como nuevo hijo
+  ctrie->childs[(int)ctrie->string[index] - OFFSET] = new_node; 
+
+  return ctrie;
+
+}
+
+
+
+/**
+ * Esta funcion toma un CTrie, 
+*/
+static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
+
+  // Creamos el nodo en donde guardaremos la otra parte del string del nodo, 
+  // que no coincidio con el string a insertar.
+  CTrie string_partition_node = ctrie_create_node(ctrie->string + index,
+                                                  ctrie->length - index,
+                                                  POINTER_COPY);
+
+
+  ctrie->length = index; // Actualizamos largo string
+
+  ctrie->end_of_word = 0; // AL haberse particionado, no es mas fin de palabra
+
+
+  // Los hijos del nodo resultante de la particion del string del nodo actual, 
+  // tendra como hijos a los del actual. 
+  ctrie_exchange_childs(string_partition_node, ctrie);
+
+  
+  // Creamos el nodo donde almacenaremos la parte del string a insertar, que no 
+  // coincidio con el string del nodo
+  CTrie new_string_node = ctrie_create_node(string + index,
+                                            strlen(string) - index,
+                                            PHYSIC_COPY); 
+
+
+  // A los dos nuevos nodos, los agregamos como hijos del nodo actual
+  ctrie->childs[(int)ctrie->string[index] - OFFSET] = string_partition_node;
+  ctrie->childs[string[index] - OFFSET] = new_string_node;
+
+  return ctrie;
+}
 
 
 
@@ -47,11 +125,11 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   if (string == NULL) return ctrie; 
 
 
-  if (ctrie_empty(ctrie))  // Si el CTrie esta vacio, agregamos la cadena
+  if (ctrie_empty(ctrie)) { // Si el CTrie esta vacio, agregamos la cadena
                            // a un nuevo nodo
 
     return ctrie_create_node(string, strlen(string), PHYSIC_COPY);
-
+  }
 
 
   // Si el CTrie no esta vacio, tenemos que recorrer el string del nodo
@@ -67,63 +145,36 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
     // Marcamos como fin de palabra, si antes no lo era
     if (! ctrie->end_of_word) ctrie->end_of_word = 1;
   }
-  
+
+
   // CASO 2: La palabra es mas chica que el string del nodo y coincidio en todo // TODO MODULARIZAR
-  else if (string[i] == '\0') {
-
+  else if (string[i] == '\0') 
     
-    CTrie new_node = ctrie_create_node(ctrie->string + i, ctrie->length - i, POINTER_COPY); // TODO CORREGIR
-    ctrie->length = i; // Actualizamos largo cadena
+    ctrie = ctrie_extend_node(ctrie, string, i);
 
-    new_node->end_of_word= 1;
-    
-
-    CTrie* change = new_node->childs;
-    new_node->childs = ctrie->childs;
-    ctrie->childs= change;
-
-
-
-    ctrie->childs[(int)(ctrie->string[i]) - OFFSET] = new_node; // Agregar opcion de copiar, o no copiar
-    
-  }
 
   // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 
   else if (i == ctrie->length) {
 
     CTrie new_child =  ctrie_add_string(ctrie->childs[(int)string[i] - OFFSET], string + i);
 
-    ctrie->childs[(int)string[i] - 97] = new_child;
-
+    ctrie->childs[(int)string[i] - OFFSET] = new_child;
   }
+
 
   // CASO 4: La palabra no coincide en algun caracter con el string del nodo // TODO MODULARIZAR
-  else if (ctrie->string[i] != string[i]) {
+  else if (ctrie->string[i] != string[i]) 
     
-    CTrie nuevo_nodo1 = ctrie_create_node(ctrie->string + i, ctrie->length - i, POINTER_COPY); //TODO CORREGIR
-
-    ctrie->length = i;
-
-    CTrie* change = ctrie->childs;
-
-    ctrie->childs = nuevo_nodo1->childs;
-
-    nuevo_nodo1->childs = change;
-
-    ctrie->childs[(int)ctrie->string[i] - OFFSET] = nuevo_nodo1;
-
-    CTrie nuevo_nodo2 = ctrie_create_node(string + i, strlen(string) - i, POINTER_COPY); //TODO CORREGIR
-
-    ctrie->childs[string[i] - OFFSET] = nuevo_nodo2;
-  }
-
-
+    ctrie = ctrie_create_bifurcation(ctrie, string, i);
+    
 
   return ctrie;
 }
 
 
+
 int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
+
 
 
 void ctrie_destroy(CTrie ctrie) {
@@ -151,11 +202,15 @@ void ctrie_destroy(CTrie ctrie) {
 void ctrie_iterate(CTrie ctrie) {
 
   if (ctrie_empty(ctrie)) return;
-
+  printf("------------------\n");
   for (int i = 0 ; i < ctrie->length ; i++) // Imprimimos los caracteres del string
     printf("%c",ctrie->string[i]);
 
   printf("\n");
+  printf("Bloque: %d\n", ctrie->start_memory_block);
+  printf("Fin: %d\n", ctrie->end_of_word);
+  printf("------------------\n");
+
 
   for (int i = 0 ; i < ALPHABET_SIZE ; i++) // Visitamos los hijos
 

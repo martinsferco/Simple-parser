@@ -1,29 +1,29 @@
 #include "ctrie.h"
+#include "stdio.h"
+#include "stdlib.h"
 
 int main() {
 
   CTrie jorge = ctrie_create();
 
-  jorge = ctrie_add_string(jorge, "dolares");
-  
-  jorge = ctrie_add_string(jorge, "dolar");
+  FILE* archivo = fopen("../dictionaries/small_dictionary.txt","r");
 
-  jorge = ctrie_add_string(jorge, "dolarizacion");
-  
+  char buffer[1000];
 
-  jorge = ctrie_add_string(jorge, "dolor");
+  for (int i = 0 ; i < 620891 ; i++) {
 
-  jorge = ctrie_add_string(jorge, "quien");
-  jorge = ctrie_add_string(jorge, "quienes");
-  jorge = ctrie_add_string(jorge, "reciben");
-  jorge = ctrie_add_string(jorge, "recibiran");
-  jorge = ctrie_add_string(jorge, "hoy");
-  jorge = ctrie_add_string(jorge, "habia");
-  jorge = ctrie_add_string(jorge, "fue");
+    fscanf(archivo, "%s",buffer);
 
+    jorge = ctrie_add_string(jorge,buffer);
 
+  }
+
+  fclose(archivo);
 
   ctrie_iterate(jorge);
+
+  ctrie_destroy(jorge);
+
 
   return 0;
 }
