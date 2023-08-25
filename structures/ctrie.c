@@ -198,6 +198,28 @@ void ctrie_destroy(CTrie ctrie) {
 }
 
 
+int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
+
+  int i;
+
+  for (i = 0 ; ctrie->string[i] == string[i] && string[i] != '\0' && i < ctrie->length ; i++);
+
+
+  // Si coinciden, solo se encuentra en el ctrie si el nodo tiene fin de palabra
+  if (string[i] == '\0' && i == ctrie->length) return ctrie->end_of_word;
+
+  // Seguimos buscando el otro pedazo del string en los hijos del CTrie
+  else if (i == ctrie->length) 
+  
+    return ctrie_search_string(ctrie->childs[(int)string[i] - OFFSET], string + i);
+
+  // Cualquier otro caso, no se encuentra la palabra
+  else return 0;
+  
+}
+
+
+
 
 void ctrie_iterate(CTrie ctrie) {
 

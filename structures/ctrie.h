@@ -58,6 +58,12 @@ void ctrie_destroy(CTrie ctrie);
 
 
 /**
+ * Busca un string en el CTrie.
+*/
+int ctrie_search_string(CTrie ctrie, char* string);
+
+
+/**
  * Recorre el ctrie, en un orden dado, mostrando las cadenas de cada
  * uno de los nodos. Consideramos que se procesa el nodo, y luego se recorren
  * los subarboles de izquierda a derecha.

@@ -53,7 +53,7 @@ GList glist_remove_first(GList list, DestroyFunction destroy);
  * comportamiento si la lista esta vacia.
 */
 void* glist_first_element(GList list, CopyFunction copy);
-
+ 
 
 /**
  * Recorre la lista, aplicando la funcion visitante a cada uno de los elementos.

@@ -9,22 +9,19 @@ int main() {
 
   Dictionary dictionary = dictionary_create();
 
-  FILE* file = fopen("../dictionaries/small_dictionary.txt","r");
+  FILE* file = fopen("../dictionaries/small_dictionary.txt", "r");
+  FILE* line = fopen("../dictionaries/prueba.txt", "r");
 
   dictionary = dictionary_load_from_file(dictionary, file);
   
-  //dictionary = ctrie_add_string(dictionary, "quien");
-  //dictionary = ctrie_add_string(dictionary, "deposito");
-  //dictionary = ctrie_add_string(dictionary, "dolar");
-  //dictionary = ctrie_add_string(dictionary, "dolares");
-  //dictionary = ctrie_add_string(dictionary, "dolor");
-
-  
-
 
   fclose(file);
 
   dictionary_iterate(dictionary);
+
+  int length = dictionary_largest_prefix(dictionary, line);
+
+  printf("MAXIMO LARGO: %d\n", length);
 
   dictionary_destroy(dictionary);
 
