@@ -1,28 +1,32 @@
-#include "ctrie.h"
+#include "../src/dictionary.h"
 #include "stdio.h"
 #include "stdlib.h"
+#include "../src/dictionary.h"
+
+
 
 int main() {
 
-  CTrie jorge = ctrie_create();
+  Dictionary dictionary = dictionary_create();
 
-  FILE* archivo = fopen("../dictionaries/small_dictionary.txt","r");
+  FILE* file = fopen("../dictionaries/small_dictionary.txt","r");
 
-  char buffer[1000];
+  dictionary = dictionary_load_from_file(dictionary, file);
+  
+  //dictionary = ctrie_add_string(dictionary, "quien");
+  //dictionary = ctrie_add_string(dictionary, "deposito");
+  //dictionary = ctrie_add_string(dictionary, "dolar");
+  //dictionary = ctrie_add_string(dictionary, "dolares");
+  //dictionary = ctrie_add_string(dictionary, "dolor");
 
-  for (int i = 0 ; i < 620891 ; i++) {
+  
 
-    fscanf(archivo, "%s",buffer);
 
-    jorge = ctrie_add_string(jorge,buffer);
+  fclose(file);
 
-  }
+  dictionary_iterate(dictionary);
 
-  fclose(archivo);
-
-  ctrie_iterate(jorge);
-
-  ctrie_destroy(jorge);
+  dictionary_destroy(dictionary);
 
 
   return 0;

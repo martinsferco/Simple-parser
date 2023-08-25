@@ -55,7 +55,7 @@ static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
 /**
  * 
 */
-static CTrie ctrie_extend_node(CTrie ctrie, char* string, int index) {
+static CTrie ctrie_extend_node(CTrie ctrie, int index) {
 
   // Creamos el nodo que sera la extension del nodo actual
   CTrie new_node = ctrie_create_node(ctrie->string + index, ctrie->length - index,
@@ -147,10 +147,10 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   }
 
 
-  // CASO 2: La palabra es mas chica que el string del nodo y coincidio en todo // TODO MODULARIZAR
+  // CASO 2: La palabra es mas chica que el string del nodo y coincidio en todo 
   else if (string[i] == '\0') 
     
-    ctrie = ctrie_extend_node(ctrie, string, i);
+    ctrie = ctrie_extend_node(ctrie, i);
 
 
   // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 
@@ -162,7 +162,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   }
 
 
-  // CASO 4: La palabra no coincide en algun caracter con el string del nodo // TODO MODULARIZAR
+  // CASO 4: La palabra no coincide en algun caracter con el string del nodo 
   else if (ctrie->string[i] != string[i]) 
     
     ctrie = ctrie_create_bifurcation(ctrie, string, i);
@@ -204,7 +204,9 @@ void ctrie_iterate(CTrie ctrie) {
   if (ctrie_empty(ctrie)) return;
   printf("------------------\n");
   for (int i = 0 ; i < ctrie->length ; i++) // Imprimimos los caracteres del string
+  
     printf("%c",ctrie->string[i]);
+  
 
   printf("\n");
   printf("Bloque: %d\n", ctrie->start_memory_block);

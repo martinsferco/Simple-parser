@@ -1,28 +1,23 @@
-# Makefile para trabajo final 
+# Makefile para compilar el TP Simple-parser.
+
+# Declaracion de banderas
+CFLAGS = -Wall -Wextra -Werror -std=c99
+TEST_FLAGS = $(FLAGS) -g
+CC = gcc
 
 
+parser: main.c ctrie.
 
-FLAGS = -Wall -Wextra -Werror -std=c99
-TEST_FLAGS = -Wall -Wextra -Werror -std=c99 -g
-
-simple_parser: main.o glist.o contacto.o
-	$(CC) -o $@ $^ $(FLAGS)
-
-main.o: main.c glist.h contacto.h
-	$(CC) -c $< $(FLAGS)
+ctrie.o: ctrie.c ctrie.h
+	$(CC) -c $< $(CFLAGS)
 
 glist.o: glist.c glist.h
-	$(CC) -c $< $(FLAGS)
+	$(CC) -c $< $(CFLAGS)
 
-contacto.o: contacto.c contacto.h
-	$(CC) -c $< $(FLAGS)
-
-
-test:
 
 clean:
 	rm *.o
-	rm programa
+	rm parser
 
 .PHONY = clean
 .PHONY = test

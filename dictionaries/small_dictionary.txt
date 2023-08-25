@@ -1,8 +1,8 @@
 quien
 deposito
-dolar
 dolares
 recibe
-recibira
+dolar
 hoy
-
+recibira
+clear
