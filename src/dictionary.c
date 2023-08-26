@@ -21,30 +21,24 @@ void dictionary_destroy(Dictionary dictionary) { ctrie_destroy(dictionary); }
 
 
 int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
-
-  char c = fgetc(file);
   
+  char c = fgetc(file);
+
   int i;
 
   for (i = 0 ; dictionary->string[i] == c && c != '\n' && i < dictionary->length ; i++) 
 
     c = fgetc(file);
   
-  /**
-   * TERMINO PORQUE:
-   * - NO COINCIDEN
-   * - SE TERMINO LA LINEA
-   * - SE TERMINO STRING NODO
-  */
-
 
   // Si coinciden y terminamos de leer la cadena, devolvemos el largo del nodo
   // solamente si es un fin de palabra
-  if (c == '\n' && i == dictionary->length) 
+  if (c == '\n' && i == dictionary->length) { 
     
+    fseek(file, -1, SEEK_CUR);
     return dictionary->end_of_word ? dictionary->length : 0;
 
-
+  }
   // Nos vemos tantas posiciones en la linea, y vemos si podemos continuar
   // recorriendo el arbol
   else if (i == dictionary->length) {
