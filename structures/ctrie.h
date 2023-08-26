@@ -30,6 +30,7 @@ typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
 } CopyOption;
 
 
+
 typedef CTrie_Node* CTrie; // Definimos el tipo CTrie
 
 

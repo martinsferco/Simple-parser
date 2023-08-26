@@ -1,7 +1,7 @@
 #include "../src/dictionary.h"
 #include "stdio.h"
 #include "stdlib.h"
-#include "../src/dictionary.h"
+#include "../src/parser.h"
 #include <assert.h>
 
 
@@ -17,18 +17,17 @@ int main() {
   
 
 
-  dictionary_iterate(dictionary); 
+  //dictionary_iterate(dictionary); 
 
-  assert (ctrie_search_string(dictionary, "quien"));
-  assert (ctrie_search_string(dictionary, "dolar"));
-  assert (! ctrie_search_string(dictionary, "do"));
+  //assert (ctrie_search_string(dictionary, "quien"));
+  //assert (ctrie_search_string(dictionary, "dolar"));
+  //assert (! ctrie_search_string(dictionary, "do"));
 
+  parse_line(dictionary, line);
 
-  int length = dictionary_largest_prefix(dictionary, line);
+  //int l = dictionary_largest_prefix(dictionary, line);
 
-
-
-  printf("MAXIMO LARGO: %d\n", length);
+  //printf("LARGO: %d",l);
 
   dictionary_destroy(dictionary);
 
