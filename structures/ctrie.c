@@ -209,15 +209,17 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
   if (string[i] == '\0' && i == ctrie->length) return ctrie->end_of_word;
 
   // Seguimos buscando el otro pedazo del string en los hijos del CTrie
-  else if (i == ctrie->length) 
-  
-    return ctrie_search_string(ctrie->childs[(int)string[i] - OFFSET], string + i);
+  else if (i == ctrie->length) { 
+    
+    CTrie child = ctrie->childs[(int)string[i] - OFFSET];
+
+    // Solo buscamos si existe el hijo
+    return child ? ctrie_search_string(child, string + i) : 0;
+  }
 
   // Cualquier otro caso, no se encuentra la palabra
   else return 0;
-  
 }
-
 
 
 
