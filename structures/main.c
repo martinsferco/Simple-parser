@@ -10,8 +10,8 @@ int main() {
 
   Dictionary dictionary = dictionary_create();
 
-  FILE* file = fopen("../dictionaries/small_dictionary.txt", "r");
-  FILE* line = fopen("../dictionaries/prueba.txt", "r");
+  FILE* file = fopen("../dictionaries/duhalde_dict.txt", "r");
+  FILE* file_to_parse = fopen("../dictionaries/duhalde_3600_800-1200.txt", "r");
 
   dictionary = dictionary_load_from_file(dictionary, file);
   
@@ -23,7 +23,7 @@ int main() {
   //assert (ctrie_search_string(dictionary, "dolar"));
   //assert (! ctrie_search_string(dictionary, "do"));
 
-  parse_line(dictionary, line);
+  parse_file(dictionary, file_to_parse);
 
   //int l = dictionary_largest_prefix(dictionary, line);
 
@@ -32,7 +32,7 @@ int main() {
   dictionary_destroy(dictionary);
 
   fclose(file);
-  fclose(line);
+  fclose(file_to_parse);
 
   return 0;
 }
