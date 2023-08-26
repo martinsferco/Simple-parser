@@ -4,17 +4,21 @@
 
 int parse_line(Dictionary dictionary, FILE* file) {
 
+  
   char c = fgetc(file); // Obtenemos un caracter para ver si llegamos a fin de linea
-
+  
+  
   while (c != '\n' && c != EOF) {
     
-    fseek(file, -1, SEEK_CUR); // Nos movemos uno para atras por la lectura de fgetc
+    file->_IO_read_ptr --;
 
-    long start_position = ftell(file);
+    char* pointer = file->_IO_read_ptr;
+
+    //long start_position = ftell(file);
 
     int length = dictionary_largest_prefix(dictionary, file);
 
-    fseek(file, start_position, SEEK_SET);
+    file->_IO_read_ptr = pointer;
 
     if (length) { // Si encontramos un prefijo
 
@@ -22,13 +26,13 @@ int parse_line(Dictionary dictionary, FILE* file) {
 
       fgets(buffer, length + 1, file);
 
-     // printf("%s ", buffer);
+    //printf("%s ", buffer);
 
     }
 
     else { // No encontramos prefijo, nos movemos uno para delante
 
-      fseek(file, 1, SEEK_CUR);
+      file->_IO_read_ptr ++;
 
     }
 

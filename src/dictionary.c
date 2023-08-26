@@ -35,7 +35,8 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
   // solamente si es un fin de palabra
   if (c == '\n' && i == dictionary->length) { 
     
-    fseek(file, -1, SEEK_CUR);
+    file->_IO_read_ptr --;
+    // fseek(file, -1, SEEK_CUR);
     return dictionary->end_of_word ? dictionary->length : 0;
 
   }
@@ -46,7 +47,9 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
     Dictionary child = dictionary->childs[(int)c - OFFSET]; // Hijo que debemos seguir
 
     // Nos vemos un caracter antes, para poder seguir buscando en el diccionario
-    fseek(file, -1, SEEK_CUR);
+    //fseek(file, -1, SEEK_CUR);
+    file->_IO_read_ptr --;
+
 
     // Nos guardamos la longitud del nodo, si es fin de palabra, si no, es nulo
     int prefix_length = dictionary->end_of_word ? dictionary->length : 0;
