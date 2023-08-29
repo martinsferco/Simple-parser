@@ -1,60 +1,52 @@
 #include "parser.h"
 
+#define INITIAL_READ_SIZE 1000
 
+int parse_line(Dictionary dictionary, DinamicString string) {
 
-int parse_line(Dictionary dictionary, FILE* file) {
+  // Obtenemos un caracter para ver si llegamos a fin de linea
+  char c = dinamic_string_read(string, 0);
+  if (c == '\0') return 1;
 
-  
-  char c = fgetc(file); // Obtenemos un caracter para ver si llegamos a fin de linea
-  
-  
-  while (c != '\n' && c != EOF) {
+  int i = 0;
+
+  while (dinamic_string_read(string, i) != '\0') {
     
-    file->_IO_read_ptr --;
-
-    char* pointer = file->_IO_read_ptr;
-
     //long start_position = ftell(file);
 
-    int length = dictionary_largest_prefix(dictionary, file);
+    int length = dictionary_largest_prefix(dictionary, string, i);
 
-    file->_IO_read_ptr = pointer;
 
     if (length) { // Si encontramos un prefijo
 
-      char buffer[READ_SIZE];
-
-      fgets(buffer, length + 1, file);
-
-    //printf("%s ", buffer);
-
+      dinamic_string_print_segment(string, i, length);
+      i += length;
     }
 
-    else { // No encontramos prefijo, nos movemos uno para delante
-
-      file->_IO_read_ptr ++;
-
-    }
-
-    c = fgetc(file);
+    // No encontramos prefijo, nos movemos uno para delante
+    else i++;
   }
 
-  //printf("\n");
-
-  return c != EOF;
-
+  return 0; // La linea que parseamos no era la vacia
 }
 
 void parse_file(Dictionary dictionary, FILE* file) {
 
-  int continue_parsing;
+  DinamicString string = dinamic_string_create(INITIAL_READ_SIZE);
 
-  do {
+  int finish = dinamic_string_load_line(string, file);
 
-    continue_parsing = parse_line(dictionary, file);
+  while (! finish) {
 
-  } while (continue_parsing);
+    parse_line(dictionary, string);
+    
+    finish = dinamic_string_load_line(string, file);
+
+    printf("\n");
+
+  }
+
+  dinamic_string_destroy(string);
 }
-
 
 

@@ -4,7 +4,7 @@
 #include "dictionary.h"
 
 
-int parse_line(Dictionary dictionary, FILE* file);
+int parse_line(Dictionary dictionary, DinamicString string);
 
 void parse_file(Dictionary dictionary, FILE* file);
 
