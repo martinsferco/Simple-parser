@@ -102,8 +102,8 @@ int dinamic_string_load_line(DinamicString string, FILE* file) {
     line_length++;
 
     // En caso de que lo llenemos, lo extendemos
-    if (line_length == dinamic_string_capacity(string))
-
+    if (line_length == dinamic_string_capacity(string)) 
+      
       dinamic_array_extends(string);
   }
 
