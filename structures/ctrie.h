@@ -49,4 +49,11 @@ int ctrie_search_string(CTrie ctrie, char* string);
 void ctrie_iterate(CTrie ctrie);
 
 
+int ctrie_node_length(CTrie ctrie);
+
+
+char ctrie_node_char(CTrie ctrie, int pos);
+
+
+
 #endif // __CTRIE_H__

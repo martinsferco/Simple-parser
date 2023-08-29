@@ -266,3 +266,18 @@ void ctrie_iterate(CTrie ctrie) {
 
     ctrie_iterate(ctrie->childs[i]);
 }
+
+
+
+
+int ctrie_node_length(CTrie ctrie) { return ctrie->length; }
+
+
+char ctrie_node_char(CTrie ctrie, int pos) { return ctrie->string[pos]; }
+
+
+
+int ctrie_end_of_word(CTrie ctrie) { return ctrie->end_of_word; }
+
+CTrie ctrie_child(CTrie ctrie, int i) { return ctrie->childs[i]; }
+

@@ -26,25 +26,25 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
 
   int i;
 
-  for (i = 0 ; dictionary->string[i] == c && c != '\n' && i < dictionary->length ; i++) 
+  for (i = 0 ; ctrie_node_char(dictionary,i) == c && c != '\n' && i < ctrie_node_length(dictionary) ; i++) 
 
     c = fgetc(file);
   
 
   // Si coinciden y terminamos de leer la cadena, devolvemos el largo del nodo
   // solamente si es un fin de palabra
-  if (c == '\n' && i == dictionary->length) { 
+  if (c == '\n' && i == ctrie_node_length(dictionary)) { 
     
     file->_IO_read_ptr --;
     // fseek(file, -1, SEEK_CUR);
-    return dictionary->end_of_word ? dictionary->length : 0;
+    return ctrie_end_of_word(dictionary) ? ctrie_node_length(dictionary) : 0;
 
   }
   // Nos vemos tantas posiciones en la linea, y vemos si podemos continuar
   // recorriendo el arbol
-  else if (i == dictionary->length) {
+  else if (i == ctrie_node_length(dictionary)) {
     
-    Dictionary child = dictionary->childs[(int)c - OFFSET]; // Hijo que debemos seguir
+    Dictionary child = ctrie_child(dictionary,(int)c - OFFSET); // Hijo que debemos seguir
 
     // Nos vemos un caracter antes, para poder seguir buscando en el diccionario
     //fseek(file, -1, SEEK_CUR);
@@ -52,7 +52,7 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
 
 
     // Nos guardamos la longitud del nodo, si es fin de palabra, si no, es nulo
-    int prefix_length = dictionary->end_of_word ? dictionary->length : 0;
+    int prefix_length = ctrie_end_of_word(dictionary) ? ctrie_node_length(dictionary) : 0;
 
     // Vemos si podemos encontrar algun prefijo, cuando seguimos recorriendo
     // el diccionario
@@ -60,7 +60,7 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
 
     // Si encontramos un prefijo nuevo mas largo, devolvemos dicha distancia,
     // si no, devolvemos el largo del prefijo actual
-    return prefix_child_length ? dictionary->length + prefix_child_length : prefix_length;
+    return prefix_child_length ? ctrie_node_length(dictionary) + prefix_child_length : prefix_length;
 
   }
   

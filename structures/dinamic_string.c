@@ -5,14 +5,15 @@
 
 #define RESIZE_FACTOR 0.5
 
+
+
+
  struct _DinamicString {
 
   char* chars; // Datos guardados
   int capacity; // Capacidad total de elementos
 
 };
-
-
 
 
 
@@ -38,11 +39,13 @@ void dinamic_string_destroy(DinamicString string) {
   free(string);
 }
 
+
 // Consideramos que la posicion es correcta
 char dinamic_string_read(DinamicString string, int pos) { 
   
   return string->chars[pos];
 }
+
 
 
 // Consideramos que la posicion es correcta
