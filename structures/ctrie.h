@@ -6,32 +6,9 @@
 #define OFFSET (int)('a') // Definimos el valor ASCII de el caracter 'a'
 
 
-typedef struct _CTrie_Node { // Estructura del nodo de nuestro CTrie
-
-  char* string;
-
-  int length; // Largo de la cadena
-
-  unsigned int end_of_word; // Vemos si llegamos hasta un fin de cadena
-
-  unsigned int start_memory_block; // Vemos si en el nodo, 'string' apunta al 
-                                   // comienzo de un bloque de memoria 
-
-  struct _CTrie_Node** childs; // Hijos del nodo
-
-} CTrie_Node;
 
 
-typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
-
-  PHYSIC_COPY,
-  POINTER_COPY,
-
-} CopyOption;
-
-
-
-typedef CTrie_Node* CTrie; // Definimos el tipo CTrie
+typedef struct CTrieNode* CTrie; // Definimos el tipo CTrie
 
 
 /**

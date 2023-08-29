@@ -5,13 +5,37 @@
 
 
 
+struct CTrieNode { // Estructura del nodo de nuestro CTrie
+
+  char* string;
+
+  int length; // Largo de la cadena
+
+  unsigned int end_of_word; // Vemos si llegamos hasta un fin de cadena
+
+  unsigned int start_memory_block; // Vemos si en el nodo, 'string' apunta al 
+                                   // comienzo de un bloque de memoria 
+
+  struct CTrieNode** childs; // Hijos del nodo
+
+};
+
+
+typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
+
+  PHYSIC_COPY,
+  POINTER_COPY,
+
+} CopyOption;
+
+
 CTrie ctrie_create() { return NULL; }
 
 
 
 static CTrie ctrie_create_node(char* string, int length, CopyOption option) { 
 
-  CTrie new_node = malloc(sizeof(CTrie_Node));
+  CTrie new_node = malloc(sizeof(struct CTrieNode));
 
   // Seteamos variables del bloque
   new_node->start_memory_block = option == PHYSIC_COPY;
