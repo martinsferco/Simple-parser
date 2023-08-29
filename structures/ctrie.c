@@ -15,7 +15,7 @@ static CTrie ctrie_create_node(char* string, int length, CopyOption option) {
 
   // Seteamos variables del bloque
   new_node->start_memory_block = option == PHYSIC_COPY;
-  new_node->end_of_word = 1; // ? Creo que esto es correcto
+  new_node->end_of_word = 1; 
 
   new_node->length = length;
 

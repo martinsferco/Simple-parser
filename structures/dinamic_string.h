@@ -1,19 +1,11 @@
 #ifndef __DINAMIC_STRING_H__
 #define __DINAMIC_STRING_H__
 
-
-typedef struct {
-
-  char* chars; // Datos guardados
-  int capacity; // Capacidad total de elementos
-  int used; // Cuantos elementos estan siendo utilizados   
-
-} _DinamicString;
+#include <stdlib.h>
+#include <stdio.h>
 
 
-
-typedef _DinamicString* DinamicString; // Definimos el tipo de arreglo dinamico
-
+typedef struct _DinamicString* DinamicString; // Definimos el tipo de string dinamico
 
 
 /**
@@ -27,10 +19,12 @@ DinamicString dinamic_string_create(int initial_capacity);
 */
 void dinamic_string_destroy(DinamicString string);
 
+
 /**
  * Leemos una casilla del arreglo dinamico.
 */
-void* dinamic_string_read(DinamicString string, int pos);
+char dinamic_string_read(DinamicString string, int pos);
+
 
 /**
  * Escribimos en una casilla del arreglo dinamico.
@@ -39,20 +33,27 @@ void dinamic_string_write(DinamicString string, int pos, char c);
 
 
 /**
+ * Imprime una seccion del string.
+*/
+void dinamic_string_print_segment(DinamicString string, int start, int length);
+
+
+/**
  * Devuelve la capacidad del arreglo dinamico.
 */
 int dinamic_string_capacity(DinamicString string);
 
 
-/**
- * Devuelve cuanto del string ha sido utilizado
-*/
-int dinamic_string_used(DinamicString string);
 
 /**
- * Aumentamos la capacidad del arreglo dinamico por un factor RESIZE_FACTOR
+ * Aumentamos la capacidad del arreglo dinamico por un factor RESIZE_FACTOR.
 */
 void dinamic_string_extends(DinamicString string);
 
+
+/**
+ * Carga el string dinamico con una linea de un archivo pasado como argumento. 
+*/
+int dinamic_string_load_line(DinamicString string, FILE* file);
 
 #endif // __DINAMIC_STRING_H__
