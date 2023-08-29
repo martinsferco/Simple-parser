@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "../structures/ctrie.h"
+#include "../structures/dinamic_string.h"
 
 
 typedef CTrie Dictionary; // Definimos el tipo Dictionary
@@ -42,7 +43,6 @@ void dictionary_destroy(Dictionary dictionary);
  * nos devuelve la maxima longitud de un prefijo que comienze en dicha
  * posicion.
 */
-int dictionary_largest_prefix(Dictionary dictionary, FILE* file);
-
+int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int pos);
 
 #endif // __DICTIONARY_H__

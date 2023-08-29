@@ -55,5 +55,11 @@ int ctrie_node_length(CTrie ctrie);
 char ctrie_node_char(CTrie ctrie, int pos);
 
 
+int ctrie_end_of_word(CTrie ctrie);
+
+
+CTrie ctrie_child(CTrie ctrie, int i);
+
+
 
 #endif // __CTRIE_H__

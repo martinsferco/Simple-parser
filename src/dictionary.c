@@ -4,6 +4,9 @@
 
 Dictionary dictionary_create() { return ctrie_create(); }
 
+
+
+
 Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file) { // TODO CORREGIR
 
   char buffer[READ_SIZE];
@@ -20,35 +23,39 @@ Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file) { // TOD
 void dictionary_destroy(Dictionary dictionary) { ctrie_destroy(dictionary); }
 
 
-int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
+
+
+
+
+int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int pos) {
   
-  char c = fgetc(file);
+  int i = 0;
 
-  int i;
+  char c_string = dinamic_string_read(string, pos);
+  char c_node = ctrie_node_char(dictionary, i); 
 
-  for (i = 0 ; ctrie_node_char(dictionary,i) == c && c != '\n' && i < ctrie_node_length(dictionary) ; i++) 
+  int length = ctrie_node_length(dictionary);
 
-    c = fgetc(file);
-  
+  for (i = 0 ; c_node == c_string && c_string != '\0' && i < length ; i++) {
+    
+    c_string = dinamic_string_read(string, pos);
+    c_node = ctrie_node_char(dictionary, i); 
+  } 
+
 
   // Si coinciden y terminamos de leer la cadena, devolvemos el largo del nodo
   // solamente si es un fin de palabra
-  if (c == '\n' && i == ctrie_node_length(dictionary)) { 
-    
-    file->_IO_read_ptr --;
-    // fseek(file, -1, SEEK_CUR);
+  if (c_string == '\0' && i == length)
+
     return ctrie_end_of_word(dictionary) ? ctrie_node_length(dictionary) : 0;
 
-  }
+
   // Nos vemos tantas posiciones en la linea, y vemos si podemos continuar
   // recorriendo el arbol
   else if (i == ctrie_node_length(dictionary)) {
     
-    Dictionary child = ctrie_child(dictionary,(int)c - OFFSET); // Hijo que debemos seguir
-
-    // Nos vemos un caracter antes, para poder seguir buscando en el diccionario
-    //fseek(file, -1, SEEK_CUR);
-    file->_IO_read_ptr --;
+    // Hijo que debemos seguir
+    Dictionary child = ctrie_child(dictionary,(int)c_string - OFFSET); 
 
 
     // Nos guardamos la longitud del nodo, si es fin de palabra, si no, es nulo
@@ -56,7 +63,7 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
 
     // Vemos si podemos encontrar algun prefijo, cuando seguimos recorriendo
     // el diccionario
-    int prefix_child_length = child ? dictionary_largest_prefix(child, file) : 0;
+    int prefix_child_length = child ? dictionary_largest_prefix(child, string, pos) : 0;
 
     // Si encontramos un prefijo nuevo mas largo, devolvemos dicha distancia,
     // si no, devolvemos el largo del prefijo actual
@@ -64,11 +71,8 @@ int dictionary_largest_prefix(Dictionary dictionary, FILE* file) {
 
   }
   
-  // Cualquier otro caso, no se encuentra la palabra
+  // Cualquier otro caso, no se encuentra otro prefijo
   else return 0;
-  
-
-
 }
 
 
