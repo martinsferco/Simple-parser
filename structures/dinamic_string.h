@@ -44,6 +44,12 @@ void dinamic_string_print_segment(DinamicString string, int start, int length);
 int dinamic_string_capacity(DinamicString string);
 
 
+/**
+ * Devuelve la cantidad de arreglo utilizado en el string dinamico
+*/
+int dinamic_string_used(DinamicString string);
+
+
 
 /**
  * Aumentamos la capacidad del arreglo dinamico por un factor RESIZE_FACTOR.
@@ -51,9 +57,18 @@ int dinamic_string_capacity(DinamicString string);
 void dinamic_string_extends(DinamicString string);
 
 
+
 /**
- * Carga el string dinamico con una linea de un archivo pasado como argumento. 
+ * 
 */
-int dinamic_string_load_line(DinamicString string, FILE* file);
+char dinamic_string_add_end(DinamicString string, FILE* file);
+
+
+/**
+ * 
+*/
+void dinamic_string_reset(DinamicString string); 
+
+
 
 #endif // __DINAMIC_STRING_H__

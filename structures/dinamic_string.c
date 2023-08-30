@@ -12,6 +12,7 @@
 
   char* chars; // Datos guardados
   int capacity; // Capacidad total de elementos
+  int used; // Cuanto del arreglo esta siendo utilizado
 
 };
 
@@ -19,12 +20,16 @@
 
 DinamicString dinamic_string_create(int initial_capacity) {
 
-  // Pedimos uno adicional por el cara
+  // Pedimos uno adicional por el caracter de terminacion
   DinamicString new_string = malloc(sizeof(struct _DinamicString) + 1);
 
   new_string->chars= malloc(sizeof(void*) * initial_capacity);
   
   new_string->capacity = initial_capacity;
+
+  new_string->used = 0;
+
+  new_string->chars[0] = '\0'; // Colocamos el terminador de cadena
 
   return new_string;
 }
@@ -71,44 +76,40 @@ void dinamic_string_print_segment(DinamicString string, int start, int length) {
 int dinamic_string_capacity(DinamicString string) { return string->capacity; }
 
 
+int dinamic_string_used(DinamicString string) { return string->used; }
 
 
-void dinamic_array_extends(DinamicString string) {
+
+void dinamic_string_extends(DinamicString string) {
   
-  // Marcamos nueva capacidad, considerando el espacio para el terminador
-  string->capacity = (string->capacity - 1) * (1 + RESIZE_FACTOR) + 1; 
+  // Cambiamos a la nueva capacidad
+  string->capacity = (string->capacity - 1) * (1 + RESIZE_FACTOR); 
 
   // Realocamos el arreglo de los datos
-  string->chars = realloc(string->chars, sizeof(char) * string->capacity);
+  string->chars = realloc(string->chars, sizeof(char) * string->capacity + 1);
 }
 
 
 
 
-int dinamic_string_load_line(DinamicString string, FILE* file) {
+
+char dinamic_string_add_end(DinamicString string, FILE* file) {
 
   char c = fgetc(file);
 
-  if (c == EOF) return 1; // Era una cadena vacia, terminamos de leer el archivo
+  // Si queremos agregar, y no tenemos suficiente espacio
+  if (string->used == string->capacity) dinamic_string_extends(string);
 
-  int line_length = 0;
+  // Adicionamos el caracter al final
+  dinamic_string_write(string, string->used, c);
+  dinamic_string_write(string, string->used + 1, '\0');
+  
+  string->used++; // Sumamos uno en la cantidad de usados
 
-  while (c != '\n') { // Mientras no hayamos llegado a fin de linea
-
-    dinamic_string_write(string, line_length, c); // Cargamos el caracter
-
-    c = fgetc(file);
-
-    line_length++;
-
-    // En caso de que lo llenemos, lo extendemos
-    if (line_length == dinamic_string_capacity(string)) 
-      
-      dinamic_array_extends(string);
-  }
-
-  // Agregamos el terminador de cadena
-  dinamic_string_write(string, line_length, '\0');
-
-  return 0; // Cargamos la cadena dentro del string dinamico
+  return c;
 }
+
+
+
+
+void dinamic_string_reset(DinamicString string) { string->used = 0; } 
