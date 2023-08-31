@@ -58,13 +58,13 @@ void dstring_write(DString string, int pos, char c) {
 
 
 
-void dstring_print_segment(DString string, int start, int length) {
+void dstring_save_segment(DString string, int start, int length, FILE* destiny) {
 
   for (int i = 0 ; i < length ; i++) 
 
-    printf("%c", string->chars[i + start]);
+    fprintf(destiny,"%c", string->chars[i + start]);
 
-  printf(" ");
+  fprintf(destiny,"%s"," ");
 }
 
 
@@ -110,3 +110,6 @@ char dstring_add_end(DString string, FILE* file) {
 
 
 void dstring_reset(DString string) { string->used = 0; } 
+
+
+char* dstring_pointer_index(DString string, int i) { return string->chars + i; }

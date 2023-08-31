@@ -33,7 +33,7 @@ void dstring_write(DString string, int pos, char c);
 /**
  * Imprime una seccion del string.
 */
-void dstring_print_segment(DString string, int start, int length);
+void dstring_save_segment(DString string, int start, int length, FILE* destiny);
 
 
 /**
@@ -54,6 +54,9 @@ int dstring_used(DString string);
 */
 void dstring_extends(DString string);
 
+
+
+char* dstring_pointer_index(DString string, int i);
 
 
 /**

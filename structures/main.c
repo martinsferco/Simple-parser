@@ -14,21 +14,21 @@ int main() {
   // FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
 
   FILE* dictionary_file = fopen("../dictionaries/big_dictionary.txt", "r");
-  FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
-
-
-
+  
   dictionary = dictionary_load_from_file(dictionary, dictionary_file);
   
+  fclose(dictionary_file);
 
 
+  FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
+  FILE* save_parsing = fopen("../results.txt","w");
   //dictionary_iterate(dictionary); 
 
   //assert (ctrie_search_string(dictionary, "quien"));
   //assert (ctrie_search_string(dictionary, "dolar"));
   //assert (! ctrie_search_string(dictionary, "do"));
 
-  parse_file(dictionary, file_to_parse, NULL);
+  parse_file(dictionary, file_to_parse, save_parsing);
 
   //int l = dictionary_largest_prefix(dictionary, line);
 
@@ -38,8 +38,8 @@ int main() {
 
   dictionary_destroy(dictionary);
 
-  fclose(dictionary_file);
   fclose(file_to_parse);
+  fclose(save_parsing);
 
   return 0;
 }

@@ -42,17 +42,21 @@ int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
     if (length) { // Si encontramos un prefijo
 
-     dstring_print_segment(line.string, i, length);
-      
+     
+     
+     dstring_save_segment(line.string, i, length, files.results_file);
+
+
       i += length;
     }
 
     // No encontramos prefijo, nos movemos uno para delante
     else {
       
-      //queue_enqueue(errors, )
+      queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string, i));
+
       i++;
-    } // TODO GUARDAR EN UNA GLIST LOS CARACTERES QUE FALLARON
+    }
   }
 
   return 0; // La linea que parseamos no era la vacia
@@ -79,11 +83,11 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
   
     finished = parse_line(dictionary, line, files); // Parseamos linea
     
-    // IMPRIMIMOS ERRORES queue_print
+    queue_dequeue_print(line.parsing_errors);
 
     dstring_reset(line.string);  // Reseteamos string dinamico
     
-    printf("\n"); // Seperamos parseo de lineas
+    fprintf(files.results_file,"%c",'\n'); // Seperamos parseo de lineas
 
     // LIBERAMOS ERRORES
   }

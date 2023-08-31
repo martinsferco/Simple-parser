@@ -25,20 +25,17 @@ void queue_destroy(Queue queue, DestroyFunction destroy);
 int queue_empty(Queue queue);
 
 /**
- * Nos devuelve el primer elemento de la cola. No queda determinado el 
- * comportamiento si la cola se encuentra vacia
+ * Encola un elemento a la cola pasada como argumento.
 */
-void* queue_first(Queue queue, CopyFunction copy);
+void queue_enqueue(Queue queue, void* data);
 
 /**
- * Encola un elemento e la lsita pasada como argumento.
+ * Desencola al primer elemento de la cola y nos los devuelve
 */
-void queue_enqueue(Queue queue, void* data, CopyFunction copy);
+void* queue_dequeue(Queue queue);
 
-/**
- * Desencola al primer elemento de la cola.
-*/
-void queue_dequeue(Queue queue, DestroyFunction destroy);
+
+void queue_dequeue_print(Queue queue);
 
 
 #endif // __QUEUE_H__
