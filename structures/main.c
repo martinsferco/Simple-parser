@@ -13,8 +13,9 @@ int main() {
   // FILE* dictionary_file = fopen("../dictionaries/small_dictionary.txt", "r");
   // FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
 
-  FILE* dictionary_file = fopen("../dictionaries/duhalde_dict.txt", "r");
-  FILE* file_to_parse = fopen("../dictionaries/duhalde_115200_800-1200.txt", "r");
+  FILE* dictionary_file = fopen("../dictionaries/big_dictionary.txt", "r");
+  FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
+
 
 
   dictionary = dictionary_load_from_file(dictionary, dictionary_file);

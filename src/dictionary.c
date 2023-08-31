@@ -27,7 +27,7 @@ void dictionary_destroy(Dictionary dictionary) { ctrie_destroy(dictionary); }
 
 
 
-int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int pos, FILE* file) {
+int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FILE* file) {
   
   int i = 0; // Indice que usaremos para recorrer string del nodo del diccionario
 
@@ -36,24 +36,24 @@ int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int p
   char c;
 
   // Todo podemos modularizar esta parte
-  if (pos < dinamic_string_used(string)) // Ya leimos este parte del archivo
+  if (pos < dstring_used(string)) // Ya leimos este parte del archivo
       
-      c = dinamic_string_read(string, pos + i);  
+      c = dstring_read(string, pos + i);  
 
     else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
-      c = dinamic_string_add_end(string, file);
+      c = dstring_add_end(string, file);
     
   
   for (; c != '\n' && c != EOF && i < length && ctrie_node_char(dictionary, i) == c ; i++) {
   
-    if (pos + i + 1 < dinamic_string_used(string)) // Ya leimos este parte del archivo
+    if (pos + i + 1 < dstring_used(string)) // Ya leimos este parte del archivo
         
-        c = dinamic_string_read(string, pos + i + 1);  
+        c = dstring_read(string, pos + i + 1);  
 
       else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
-        c = dinamic_string_add_end(string, file);
+        c = dstring_add_end(string, file);
 
 
 

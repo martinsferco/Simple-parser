@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
+#include <ctype.h>
 
 
 struct CTrieNode { // Estructura del nodo de nuestro CTrie
@@ -29,6 +29,16 @@ typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
 } CopyOption;
 
 
+
+static void lower_case_strcpy(char* destiny, char* origin) {
+
+  for (int i = 0 ; origin[i] != '\0' ; i++)
+    destiny[i] = tolower(origin[i]);
+} 
+
+
+
+
 CTrie ctrie_create() { return NULL; }
 
 
@@ -49,7 +59,7 @@ static CTrie ctrie_create_node(char* string, int length, CopyOption option) {
   else {
     
     new_node->string = malloc(sizeof(char) * (length + 1));
-    strcpy(new_node->string, string);  
+    lower_case_strcpy(new_node->string, string); // Guardamos el string en minusculas
   }
   
   // Pedimos memoria para todos los hijos
@@ -137,7 +147,7 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 
   // A los dos nuevos nodos, los agregamos como hijos del nodo actual
   ctrie->childs[(int)ctrie->string[index] - OFFSET] = string_partition_node;
-  ctrie->childs[string[index] - OFFSET] = new_string_node;
+  ctrie->childs[tolower(string[index]) - OFFSET] = new_string_node;
 
   return ctrie;
 }
@@ -160,7 +170,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   int i;
 
   // Recorremos hasta que no matcheen o lleguemos al final de alguna cadena
-  for (i = 0 ; ctrie->string[i] == string[i] && string[i] != '\0' && i < ctrie->length ; i++);
+  for (i = 0 ; ctrie->string[i] == tolower(string[i]) && string[i] != '\0' && i < ctrie->length ; i++);
 
 
   // CASO 1: La palabra y el string del nodo coinciden en largo y caracteres
@@ -180,14 +190,14 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 
   else if (i == ctrie->length) {
 
-    CTrie new_child =  ctrie_add_string(ctrie->childs[(int)string[i] - OFFSET], string + i);
+    CTrie new_child =  ctrie_add_string(ctrie->childs[(int)tolower(string[i]) - OFFSET], string + i);
 
-    ctrie->childs[(int)string[i] - OFFSET] = new_child;
+    ctrie->childs[(int)tolower(string[i]) - OFFSET] = new_child;
   }
 
 
   // CASO 4: La palabra no coincide en algun caracter con el string del nodo 
-  else if (ctrie->string[i] != string[i]) 
+  else if (ctrie->string[i] != tolower(string[i])) 
     
     ctrie = ctrie_create_bifurcation(ctrie, string, i);
     
@@ -226,7 +236,7 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 
   int i;
 
-  for (i = 0 ; ctrie->string[i] == string[i] && string[i] != '\0' && i < ctrie->length ; i++);
+  for (i = 0 ; ctrie->string[i] == tolower(string[i]) && string[i] != '\0' && i < ctrie->length ; i++);
 
 
   // Si coinciden, solo se encuentra en el ctrie si el nodo tiene fin de palabra
@@ -235,7 +245,7 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
   // Seguimos buscando el otro pedazo del string en los hijos del CTrie
   else if (i == ctrie->length) { 
     
-    CTrie child = ctrie->childs[(int)string[i] - OFFSET];
+    CTrie child = ctrie->childs[(int)tolower(string[i]) - OFFSET];
 
     // Solo buscamos si existe el hijo
     return child ? ctrie_search_string(child, string + i) : 0;

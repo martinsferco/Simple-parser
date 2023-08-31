@@ -1,14 +1,29 @@
 #include "parser.h"
-#include <stdio.h>
 
 #define INITIAL_READ_SIZE 500
 
 
+typedef struct {
 
-int parse_line(Dictionary dictionary, DinamicString string, FILE* file) {
+  FILE* parse_file;
+  FILE* results_file;
+
+} ParsingFiles;
+
+typedef struct {
+
+  DString string;
+  Queue parsing_errors;
+
+} ParsingLine;
+
+
+// int parse_line(Dictionary dictionary, ParsingFiles files, ParsingLine line)
+
+int parse_line(Dictionary dictionary, DString string, FILE* file, Queue errors) {
 
   // Obtenemos el primer caracter para ver si llegamos a fin de linea
-  char c = dinamic_string_add_end(string, file);
+  char c = dstring_add_end(string, file);
   
   // TODO Depende del tipo de terminacion, podemos devolver un enum adecuado
 
@@ -19,13 +34,13 @@ int parse_line(Dictionary dictionary, DinamicString string, FILE* file) {
 
   int i = 0;
 
-  while (dinamic_string_read(string, i) != '\n' && dinamic_string_read(string, i) != EOF) { // Recorremos hasta llegar a fin de linea
+  while (dstring_read(string, i) != '\n' && dstring_read(string, i) != EOF) { // Recorremos hasta llegar a fin de linea
     
     int length = dictionary_largest_prefix(dictionary, string, i, file);
 
     if (length) { // Si encontramos un prefijo
 
-     dinamic_string_print_segment(string, i, length);
+     dstring_print_segment(string, i, length);
       
       i += length;
     }
@@ -33,7 +48,7 @@ int parse_line(Dictionary dictionary, DinamicString string, FILE* file) {
     // No encontramos prefijo, nos movemos uno para delante
     else {
       
-      // parsing_errors = queue_enqueue(parsing_errors,string[i],id);  
+      //queue_enqueue(errors, )
       i++;
     } // TODO GUARDAR EN UNA GLIST LOS CARACTERES QUE FALLARON
   }
@@ -46,26 +61,26 @@ int parse_line(Dictionary dictionary, DinamicString string, FILE* file) {
 void parse_file(Dictionary dictionary, FILE* file) {
 
   // String dinamico donde iremos almacenando la linea leida
-  DinamicString string = dinamic_string_create(INITIAL_READ_SIZE);
+  DString string = dstring_create(INITIAL_READ_SIZE);
 
-  // GList errors = glist_create();
+  Queue errors = queue_create();
 
   int finished = 0;
 
   while (! finished) {
   
-    finished = parse_line(dictionary, string, file); // Parseamos linea
+    finished = parse_line(dictionary, string, file, errors); // Parseamos linea
     
-    // IMPRIMIMOS ERRORES
+    // IMPRIMIMOS ERRORES queue_print
 
-    dinamic_string_reset(string);  // Reseteamos string dinamico
+    dstring_reset(string);  // Reseteamos string dinamico
     
     printf("\n"); // Seperamos parseo de lineas
 
     // LIBERAMOS ERRORES
   }
 
-  dinamic_string_destroy(string);
+  dstring_destroy(string);
   //glist_destroy(errors);
 }
 

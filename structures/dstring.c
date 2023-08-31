@@ -1,14 +1,11 @@
-#include "dinamic_string.h"
+#include "dstring.h"
 #include <stdlib.h>
-#include <stdio.h>
 
 
 #define RESIZE_FACTOR 0.5
 
 
-
-
- struct _DinamicString {
+ struct _DString {
 
   char* chars; // Datos guardados
   int capacity; // Capacidad total de elementos
@@ -18,10 +15,10 @@
 
 
 
-DinamicString dinamic_string_create(int initial_capacity) {
+DString dstring_create(int initial_capacity) {
 
   // Pedimos uno adicional por el caracter de terminacion
-  DinamicString new_string = malloc(sizeof(struct _DinamicString) + 1);
+  DString new_string = malloc(sizeof(struct _DString) + 1);
 
   new_string->chars= malloc(sizeof(void*) * initial_capacity);
   
@@ -35,7 +32,7 @@ DinamicString dinamic_string_create(int initial_capacity) {
 }
 
 
-void dinamic_string_destroy(DinamicString string) {
+void dstring_destroy(DString string) {
 
   // Liberamos el arreglo de datos
   free(string->chars);
@@ -46,7 +43,7 @@ void dinamic_string_destroy(DinamicString string) {
 
 
 // Consideramos que la posicion es correcta
-char dinamic_string_read(DinamicString string, int pos) { 
+char dstring_read(DString string, int pos) { 
   
   return string->chars[pos];
 }
@@ -54,14 +51,14 @@ char dinamic_string_read(DinamicString string, int pos) {
 
 
 // Consideramos que la posicion es correcta
-void dinamic_string_write(DinamicString string, int pos, char c) {
+void dstring_write(DString string, int pos, char c) {
   
   string->chars[pos] = c;
 }
 
 
 
-void dinamic_string_print_segment(DinamicString string, int start, int length) {
+void dstring_print_segment(DString string, int start, int length) {
 
   for (int i = 0 ; i < length ; i++) 
 
@@ -73,14 +70,14 @@ void dinamic_string_print_segment(DinamicString string, int start, int length) {
 
 
 
-int dinamic_string_capacity(DinamicString string) { return string->capacity; }
+int dstring_capacity(DString string) { return string->capacity; }
 
 
-int dinamic_string_used(DinamicString string) { return string->used; }
+int dstring_used(DString string) { return string->used; }
 
 
 
-void dinamic_string_extends(DinamicString string) {
+void dstring_extends(DString string) {
   
   // Cambiamos a la nueva capacidad
   string->capacity = (string->capacity - 1) * (1 + RESIZE_FACTOR); 
@@ -93,16 +90,16 @@ void dinamic_string_extends(DinamicString string) {
 
 
 
-char dinamic_string_add_end(DinamicString string, FILE* file) {
+char dstring_add_end(DString string, FILE* file) {
 
   char c = fgetc(file);
 
   // Si queremos agregar, y no tenemos suficiente espacio
-  if (string->used == string->capacity) dinamic_string_extends(string);
+  if (string->used == string->capacity) dstring_extends(string);
 
   // Adicionamos el caracter al final
-  dinamic_string_write(string, string->used, c);
-  dinamic_string_write(string, string->used + 1, '\0');
+  dstring_write(string, string->used, c);
+  dstring_write(string, string->used + 1, '\0');
   
   string->used++; // Sumamos uno en la cantidad de usados
 
@@ -112,4 +109,4 @@ char dinamic_string_add_end(DinamicString string, FILE* file) {
 
 
 
-void dinamic_string_reset(DinamicString string) { string->used = 0; } 
+void dstring_reset(DString string) { string->used = 0; } 

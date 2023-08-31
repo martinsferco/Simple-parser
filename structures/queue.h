@@ -2,6 +2,7 @@
 #define __QUEUE_H__
 
 
+
 #include "glist.h"
 
 
@@ -32,12 +33,12 @@ void* queue_first(Queue queue, CopyFunction copy);
 /**
  * Encola un elemento e la lsita pasada como argumento.
 */
-Queue queue_enqueue(Queue queue, void* data, CopyFunction copy);
+void queue_enqueue(Queue queue, void* data, CopyFunction copy);
 
 /**
  * Desencola al primer elemento de la cola.
 */
-Queue queue_dequeue(Queue queue, DestroyFunction destroy);
+void queue_dequeue(Queue queue, DestroyFunction destroy);
 
 
 #endif // __QUEUE_H__

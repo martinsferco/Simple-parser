@@ -1,5 +1,6 @@
 #include "queue.h"
 
+
 Queue queue_create() { return glist_create(); }
 
 
@@ -17,14 +18,13 @@ void* queue_first(Queue queue, CopyFunction copy) {
   return glist_first_element(queue, copy);
 }
 
+void queue_enqueue(Queue queue, void* data, CopyFunction copy) { 
 
-Queue queue_enqueue(Queue queue, void* data, CopyFunction copy) { 
-
-  return glist_add_end(queue, data, copy);
+  glist_add_last(queue, data, copy);
 }
 
 
-Queue queue_dequeue(Queue queue, DestroyFunction destroy) {
+void queue_dequeue(Queue queue, DestroyFunction destroy) {
 
-   return glist_remove_first(queue, destroy);
+  glist_remove_first(queue, destroy);
 }
