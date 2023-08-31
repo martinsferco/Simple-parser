@@ -44,7 +44,7 @@ int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
      
      
-     dstring_save_segment(line.string, i, length, files.results_file);
+      dstring_save_segment(line.string, i, length, files.results_file);
 
 
       i += length;
@@ -62,6 +62,8 @@ int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
   return 0; // La linea que parseamos no era la vacia
 }
 
+
+static void skip(void* data) { return; }
 
 
 void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
@@ -83,20 +85,14 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
   
     finished = parse_line(dictionary, line, files); // Parseamos linea
     
-    queue_dequeue_print(line.parsing_errors);
+    queue_dequeue_print(line.parsing_errors, files.results_file);
 
     dstring_reset(line.string);  // Reseteamos string dinamico
-    
-    fprintf(files.results_file,"%c",'\n'); // Seperamos parseo de lineas
-
-    // LIBERAMOS ERRORES
+  
   }
 
-
   dstring_destroy(line.string);
-  //queue_destroy(line.parsing_errors, );
-
-  //glist_destroy(errors);
+  queue_destroy(line.parsing_errors, skip);
 }
 
 

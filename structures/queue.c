@@ -39,11 +39,20 @@ void* queue_dequeue(Queue queue) {
 }
 
 
-void queue_dequeue_print(Queue queue) {
+void queue_dequeue_print(Queue queue, FILE* resultsFile) {
 
-  while (! queue_empty(queue)) printf("%c", *((char*) queue_dequeue(queue)));
+  if (queue_empty(queue)) fprintf(resultsFile, "%s", " | NO HUBO ERRORES\n");
 
-  printf("\n");
+  else {
+    
+    fprintf(resultsFile, "%s", " | ERRORES: ");
 
+  
+  
+  while (! queue_empty(queue)) fprintf(resultsFile, "%c", *((char*) queue_dequeue(queue)));
+
+  fprintf(resultsFile, "%s", "\n");
+
+  }
 
 }

@@ -97,9 +97,9 @@ void* glist_first_element(GList list, CopyFunction copy) {
 
 
 
-void* glist_recorrer(GList list, VisitFunction visit) {
+void glist_recorrer(GList list, VisitFunction visit) {
 
-  for (GNode* temp = list->first ; temp != NULL ; temp->next)
+  for (GNode* temp = list->first ; temp != NULL ; temp = temp->next)
     visit(temp->data);
 }
 
