@@ -170,7 +170,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   int i;
 
   // Recorremos hasta que no matcheen o lleguemos al final de alguna cadena
-  for (i = 0 ; ctrie->string[i] == tolower(string[i]) && string[i] != '\0' && i < ctrie->length ; i++);
+  for (i = 0 ; i < ctrie->length && ctrie->string[i] == tolower(string[i]) && string[i] != '\0' ; i++);
 
 
   // CASO 1: La palabra y el string del nodo coinciden en largo y caracteres

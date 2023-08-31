@@ -1,6 +1,6 @@
 #include "parser.h"
 
-#define INITIAL_READ_SIZE 500
+#define INITIAL_READ_SIZE 5000
 
 
 struct _ParseFiles{
@@ -52,8 +52,6 @@ enum _ParseResult {
      
      
       dstring_save_segment(line.string, i, length, files.results_file);
-
-
       i += length;
     }
 
@@ -61,11 +59,9 @@ enum _ParseResult {
     else {
       
       queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string, i));
-
       i++;
     }
   }
-
   return NON_EMPTY_LINE; // La linea que parseamos no era la vacia
 }
 
@@ -99,8 +95,6 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
     else if (result == NON_EMPTY_LINE)
     
       queue_dequeue_print(line.parsing_errors, files.results_file);
-
-    
 
     dstring_reset(line.string);  // Reseteamos string dinamico
   

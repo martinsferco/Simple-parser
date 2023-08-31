@@ -45,6 +45,8 @@ void glist_destroy(GList list, DestroyFunction destroy) {
     destroy(removedNode->data);
     free(removedNode);
   }
+
+  free(list);
 }
 
 

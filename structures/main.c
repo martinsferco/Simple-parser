@@ -13,14 +13,14 @@ int main() {
   // FILE* dictionary_file = fopen("../dictionaries/small_dictionary.txt", "r");
   // FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
 
-  FILE* dictionary_file = fopen("../dictionaries/big_dictionary.txt", "r");
+  FILE* dictionary_file = fopen("../dictionaries/duhalde_dict_alt.txt", "r");
   
   dictionary = dictionary_load_from_file(dictionary, dictionary_file);
   
-  fclose(dictionary_file);
+  fclose(dictionary_file); // Cerramos el archivo del diccionario
 
 
-  FILE* file_to_parse = fopen("../dictionaries/prueba.txt", "r");
+  FILE* file_to_parse = fopen("../dictionaries/duhalde_3600_800-1200.txt", "r");
   FILE* save_parsing = fopen("../results.txt","w");
   //dictionary_iterate(dictionary); 
 
@@ -38,8 +38,8 @@ int main() {
 
   dictionary_destroy(dictionary);
 
-  fclose(file_to_parse);
-  fclose(save_parsing);
+  fclose(file_to_parse); // Cerramos el archivo a parsear
+  fclose(save_parsing); // Cerramos el archivo del resultado del parseo
 
   return 0;
 }
