@@ -18,20 +18,27 @@ struct _ParsedLine {
 };
 
 
+enum _ParseResult {
+
+  END_OF_FILE,
+  EMPTY_LINE,
+  NON_EMPTY_LINE
+
+};
 
 
 // int parse_line(Dictionary dictionary, ParseFiles files, ParsedLineline)
 
-int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
+ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
   // Obtenemos el primer caracter para ver si llegamos a fin de linea
   char c = dstring_add_end(line.string, files.parse_file);
   
   // TODO Depende del tipo de terminacion, podemos devolver un enum adecuado
 
-  if (c == EOF) return 1; // Llegamos al final del archivo
+  if (c == EOF) return END_OF_FILE; // Llegamos al final del archivo
 
-  if (c == '\n') return 0; // No llegamos al final del archivo, pero es linea vacia
+  if (c == '\n') return EMPTY_LINE; // No llegamos al final del archivo, pero es linea vacia
 
 
   int i = 0;
@@ -59,7 +66,7 @@ int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
     }
   }
 
-  return 0; // La linea que parseamos no era la vacia
+  return NON_EMPTY_LINE; // La linea que parseamos no era la vacia
 }
 
 
@@ -79,13 +86,21 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
 
 
 
-  int finished = 0;
+  ParseResult result = NON_EMPTY_LINE;
 
-  while (! finished) {
+  while (result != END_OF_FILE) {
   
-    finished = parse_line(dictionary, line, files); // Parseamos linea
+    result = parse_line(dictionary, line, files); // Parseamos linea
     
-    queue_dequeue_print(line.parsing_errors, files.results_file);
+    if (result == EMPTY_LINE) 
+      
+      fprintf(results_file, "%s", "LINEA VACIA\n");
+
+    else if (result == NON_EMPTY_LINE)
+    
+      queue_dequeue_print(line.parsing_errors, files.results_file);
+
+    
 
     dstring_reset(line.string);  // Reseteamos string dinamico
   

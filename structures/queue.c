@@ -45,7 +45,7 @@ void queue_dequeue_print(Queue queue, FILE* resultsFile) {
 
   else {
     
-    fprintf(resultsFile, "%s", " | ERRORES: ");
+    fprintf(resultsFile, "%s", "| ERRORES: ");
 
   
   

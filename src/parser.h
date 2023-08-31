@@ -9,8 +9,10 @@ typedef struct _ParseFiles ParseFiles;
 
 typedef struct _ParsedLine ParsedLine ;
 
+typedef enum _ParseResult ParseResult;
 
-int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files);
+
+ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files);
 
 void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file);
 
