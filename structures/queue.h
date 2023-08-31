@@ -9,10 +9,6 @@
 
 typedef GList Queue; // Impletamos el tipo Cola con una Lista General
 
-
-/**
- * Devuelve una cola vacia.
-*/
 Queue queue_create();
 
 /**
@@ -28,7 +24,7 @@ int queue_empty(Queue queue);
 /**
  * Encola un elemento a la cola pasada como argumento.
 */
-void queue_enqueue(Queue queue, void* data);
+void queue_enqueue(Queue queue, void* data, CopyFunction copy);
 
 /**
  * Desencola al primer elemento de la cola y nos los devuelve
@@ -36,7 +32,7 @@ void queue_enqueue(Queue queue, void* data);
 void* queue_dequeue(Queue queue);
 
 
-void queue_dequeue_print(Queue queue, FILE* resultsFiles);
+void queue_dequeue_print(Queue queue, FILE* resultsFiles); // Meter en otro archivo
 
 
 #endif // __QUEUE_H__

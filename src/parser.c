@@ -1,6 +1,6 @@
 #include "parser.h"
 
-#define INITIAL_READ_SIZE 5000
+#define INITIAL_READ_SIZE 500
 
 
 struct _ParseFiles{
@@ -27,14 +27,23 @@ enum _ParseResult {
 };
 
 
-// int parse_line(Dictionary dictionary, ParseFiles files, ParsedLineline)
+static void* copy_char(void* charPointer) {
 
- ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
+  char* charCopy = malloc(sizeof(char));
+
+  *charCopy = *((char*) charPointer);
+
+  return (void*) charCopy;
+}
+
+ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
   // Obtenemos el primer caracter para ver si llegamos a fin de linea
   char c = dstring_add_end(line.string, files.parse_file);
-  
-  // TODO Depende del tipo de terminacion, podemos devolver un enum adecuado
+
+  int match = 1;
+
+  char espacio = ' ';
 
   if (c == EOF) return END_OF_FILE; // Llegamos al final del archivo
 
@@ -43,24 +52,29 @@ enum _ParseResult {
 
   int i = 0;
 
-  while (dstring_read(line.string, i) != '\n' && dstring_read(line.string, i) != EOF) { // Recorremos hasta llegar a fin de linea
+  while (dstring_read(line.string, i) != '\n' && dstring_read(line.string, i) != EOF && dstring_read(line.string,i) != '\0') { // Recorremos hasta llegar a fin de linea
+    
+    dstring_add_end(line.string, files.parse_file);
     
     int length = dictionary_largest_prefix(dictionary, line.string, i, files.parse_file);
 
     if (length) { // Si encontramos un prefijo
 
-     
-     
       dstring_save_segment(line.string, i, length, files.results_file);
       i += length;
+      match = 1;
     }
 
-    // No encontramos prefijo, nos movemos uno para delante
-    else {
+    
+    else { // No encontramos prefijo, nos movemos uno para delante
       
-      queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string, i));
+      if (match) queue_enqueue(line.parsing_errors, &espacio, copy_char);
+
+      queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string,i), copy_char);
       i++;
+      match = 0;
     }
+
   }
   return NON_EMPTY_LINE; // La linea que parseamos no era la vacia
 }

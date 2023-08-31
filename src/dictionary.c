@@ -63,7 +63,7 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
 
   // Si coinciden y terminamos de leer la cadena, devolvemos el largo del nodo
   // solamente si es un fin de palabra
-  if (c == '\n' && i == length)
+  if ((c == '\n' || c == EOF) && i == length)
 
     return ctrie_end_of_word(dictionary) ? length : 0;
 

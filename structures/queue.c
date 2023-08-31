@@ -1,6 +1,6 @@
 #include "queue.h"
 #include <stdio.h>
-
+#include <stdlib.h>
 Queue queue_create() { return glist_create(); }
 
 
@@ -18,9 +18,9 @@ static void skip(void* data) { return; }
 int queue_empty(Queue queue) { return glist_empty(queue); }
 
 
-void queue_enqueue(Queue queue, void* data) { 
+void queue_enqueue(Queue queue, void* data, CopyFunction copy) { 
 
-  glist_add_last(queue, data, id); // Agregamos sin hacer copia fisica
+  glist_add_last(queue, data, copy); // Agregamos sin hacer copia fisica
 }
 
 
@@ -35,7 +35,6 @@ void* queue_dequeue(Queue queue) {
   glist_remove_first(queue, skip);
 
   return first_element;
-
 }
 
 
@@ -45,11 +44,18 @@ void queue_dequeue_print(Queue queue, FILE* resultsFile) {
 
   else {
     
-    fprintf(resultsFile, "%s", "| ERRORES: ");
+    fprintf(resultsFile, "%s", "| ERRORES:");
 
+    char* charPointer;
   
+  while (! queue_empty(queue)) {
+    
+    charPointer = (char*) queue_dequeue(queue);
+
+    fprintf(resultsFile, "%c", *charPointer);
   
-  while (! queue_empty(queue)) fprintf(resultsFile, "%c", *((char*) queue_dequeue(queue)));
+    free(charPointer);
+  }
 
   fprintf(resultsFile, "%s", "\n");
 
