@@ -15,20 +15,20 @@
 
 
 
-DString dstring_create(int initial_capacity) {
+DString dstring_create(int initialCapacity) {
 
   // Pedimos uno adicional por el caracter de terminacion
-  DString new_string = malloc(sizeof(struct _DString) + 1);
+  DString newString = malloc(sizeof(struct _DString));
 
-  new_string->chars= malloc(sizeof(void*) * initial_capacity);
+  newString->chars= malloc(sizeof(void*) * (initialCapacity + 1));
   
-  new_string->capacity = initial_capacity;
+  newString->capacity = initialCapacity;
 
-  new_string->used = 0;
+  newString->used = 0;
 
-  new_string->chars[0] = '\0'; // Colocamos el terminador de cadena
+  newString->chars[0] = '\0'; // Colocamos el terminador de cadena
 
-  return new_string;
+  return newString;
 }
 
 

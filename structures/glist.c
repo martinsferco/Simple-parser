@@ -23,27 +23,27 @@ struct _GList {
 
 GList glist_create() {
 
-  GList new_list = malloc(sizeof(struct _GList));
+  GList newList = malloc(sizeof(struct _GList));
 
-  new_list->first = NULL;
-  new_list->last = NULL;
+  newList->first = NULL;
+  newList->last = NULL;
 
-  return new_list;
+  return newList;
 }
 
 
 void glist_destroy(GList list, DestroyFunction destroy) {
 
-  GNode* remove_node;
+  GNode* removedNode;
 
   GNode* temp = list->first;
 
   while (temp != NULL) {
 
-    remove_node = temp;
+    removedNode = temp;
     temp = temp->next;
-    destroy(remove_node->data);
-    free(remove_node);
+    destroy(removedNode->data);
+    free(removedNode);
   }
 }
 
@@ -55,21 +55,21 @@ int glist_empty(GList list) { return (list->first == NULL); }
 
 void glist_add_last(GList list, void* data, CopyFunction copy) {
 
-  GNode* new_node = malloc(sizeof(GNode));
-  new_node->data = copy(data);
+  GNode* newNode = malloc(sizeof(GNode));
+  newNode->data = copy(data);
 
   if (glist_empty(list)) {
 
-    new_node->next = NULL;
-    list->first = new_node;
-    list->last = new_node;
+    newNode->next = NULL;
+    list->first = newNode;
+    list->last = newNode;
   }
 
   else {
 
-    new_node->next = NULL;
-    list->last->next = new_node;
-    list->last = new_node;
+    newNode->next = NULL;
+    list->last->next = newNode;
+    list->last = newNode;
   }
 }
 
@@ -79,13 +79,13 @@ void glist_remove_first(GList list, DestroyFunction destroy) {
 
   if (glist_empty(list)) return;
 
-  GNode* new_start = list->first->next;
+  GNode* newStart = list->first->next;
 
   // Liberamos el primer nodo
   destroy(list->first->data);
   free(list->first);
 
-  list->first = new_start;
+  list->first = newStart;
 }
 
 

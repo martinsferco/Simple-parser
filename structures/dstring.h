@@ -9,7 +9,7 @@ typedef struct _DString* DString; // Definimos el tipo de string dinamico
 /**
  * Crea un arreglo dinamico con una cierta capacidad inicial.
 */
-DString dstring_create(int initial_capacity);
+DString dstring_create(int initialCapacity);
 
 
 /**

@@ -11,9 +11,9 @@ struct CTrieNode { // Estructura del nodo de nuestro CTrie
 
   int length; // Largo de la cadena
 
-  unsigned int end_of_word; // Vemos si llegamos hasta un fin de cadena
+  unsigned int endOfWord; // Vemos si llegamos hasta un fin de cadena
 
-  unsigned int start_memory_block; // Vemos si en el nodo, 'string' apunta al 
+  unsigned int startMemoryBlock; // Vemos si en el nodo, 'string' apunta al 
                                    // comienzo de un bloque de memoria 
 
   struct CTrieNode** childs; // Hijos del nodo
@@ -45,30 +45,30 @@ CTrie ctrie_create() { return NULL; }
 
 static CTrie ctrie_create_node(char* string, int length, CopyOption option) { 
 
-  CTrie new_node = malloc(sizeof(struct CTrieNode));
+  CTrie newNode = malloc(sizeof(struct CTrieNode));
 
   // Seteamos variables del bloque
-  new_node->start_memory_block = option == PHYSIC_COPY;
-  new_node->end_of_word = 1; 
+  newNode->startMemoryBlock = (option == PHYSIC_COPY);
+  newNode->endOfWord = 1; 
 
-  new_node->length = length;
+  newNode->length = length;
 
   // Copiamos el string fisicamente, o solo guardamos su direccion
-  if (option == POINTER_COPY) new_node->string = string;
+  if (option == POINTER_COPY) newNode->string = string;
 
   else {
     
-    new_node->string = malloc(sizeof(char) * (length + 1));
-    lower_case_strcpy(new_node->string, string); // Guardamos el string en minusculas
+    newNode->string = malloc(sizeof(char) * (length + 1));
+    lower_case_strcpy(newNode->string, string); // Guardamos el string en minusculas
   }
   
   // Pedimos memoria para todos los hijos
-  new_node->childs = malloc(sizeof(CTrie) * ALPHABET_SIZE);
+  newNode->childs = malloc(sizeof(CTrie) * ALPHABET_SIZE);
 
   // Inicializamos todos sus hijos a NULL
-  for (int i = 0 ; i < ALPHABET_SIZE; new_node->childs[i++] = ctrie_create());
+  for (int i = 0 ; i < ALPHABET_SIZE; newNode->childs[i++] = ctrie_create());
 
-  return new_node;
+  return newNode;
 }
 
 
@@ -92,23 +92,23 @@ static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
 static CTrie ctrie_extend_node(CTrie ctrie, int index) {
 
   // Creamos el nodo que sera la extension del nodo actual
-  CTrie new_node = ctrie_create_node(ctrie->string + index, ctrie->length - index,
+  CTrie newNode = ctrie_create_node(ctrie->string + index, ctrie->length - index,
                                                             POINTER_COPY); 
   
 
   ctrie->length = index; // Actualizamos largo string
 
-  new_node->end_of_word = ctrie->end_of_word; // Sera fin de palabra si la 
+  newNode->endOfWord = ctrie->endOfWord; // Sera fin de palabra si la 
                                               // origina lo era 
   
-  ctrie->end_of_word = 1; // El nodo actual pasa a ser un fin de palabra
+  ctrie->endOfWord = 1; // El nodo actual pasa a ser un fin de palabra
 
   
-  ctrie_exchange_childs(new_node, ctrie); // Intercambiamos hijos
+  ctrie_exchange_childs(newNode, ctrie); // Intercambiamos hijos
   
 
   // Lo ponemos como nuevo hijo
-  ctrie->childs[(int)ctrie->string[index] - OFFSET] = new_node; 
+  ctrie->childs[(int)ctrie->string[index] - OFFSET] = newNode; 
 
   return ctrie;
 
@@ -123,31 +123,31 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 
   // Creamos el nodo en donde guardaremos la otra parte del string del nodo, 
   // que no coincidio con el string a insertar.
-  CTrie string_partition_node = ctrie_create_node(ctrie->string + index,
+  CTrie stringPartitionNode = ctrie_create_node(ctrie->string + index,
                                                   ctrie->length - index,
                                                   POINTER_COPY);
 
 
   ctrie->length = index; // Actualizamos largo string
 
-  ctrie->end_of_word = 0; // AL haberse particionado, no es mas fin de palabra
+  ctrie->endOfWord = 0; // AL haberse particionado, no es mas fin de palabra
 
 
   // Los hijos del nodo resultante de la particion del string del nodo actual, 
   // tendra como hijos a los del actual. 
-  ctrie_exchange_childs(string_partition_node, ctrie);
+  ctrie_exchange_childs(stringPartitionNode, ctrie);
 
   
   // Creamos el nodo donde almacenaremos la parte del string a insertar, que no 
   // coincidio con el string del nodo
-  CTrie new_string_node = ctrie_create_node(string + index,
+  CTrie newStringNode = ctrie_create_node(string + index,
                                             strlen(string) - index,
                                             PHYSIC_COPY); 
 
 
   // A los dos nuevos nodos, los agregamos como hijos del nodo actual
-  ctrie->childs[(int)ctrie->string[index] - OFFSET] = string_partition_node;
-  ctrie->childs[tolower(string[index]) - OFFSET] = new_string_node;
+  ctrie->childs[(int)ctrie->string[index] - OFFSET] = stringPartitionNode;
+  ctrie->childs[tolower(string[index]) - OFFSET] = newStringNode;
 
   return ctrie;
 }
@@ -177,7 +177,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   if (string[i] == '\0' && i == ctrie->length) {
 
     // Marcamos como fin de palabra, si antes no lo era
-    if (! ctrie->end_of_word) ctrie->end_of_word = 1;
+    if (! ctrie->endOfWord) ctrie->endOfWord = 1;
   }
 
 
@@ -190,9 +190,9 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 
   else if (i == ctrie->length) {
 
-    CTrie new_child =  ctrie_add_string(ctrie->childs[(int)tolower(string[i]) - OFFSET], string + i);
+    CTrie newChild =  ctrie_add_string(ctrie->childs[(int)tolower(string[i]) - OFFSET], string + i);
 
-    ctrie->childs[(int)tolower(string[i]) - OFFSET] = new_child;
+    ctrie->childs[(int)tolower(string[i]) - OFFSET] = newChild;
   }
 
 
@@ -223,8 +223,8 @@ void ctrie_destroy(CTrie ctrie) {
     // Liberamos el arreglo de hijos
     free(ctrie->childs);
 
-    // Liberamos la cadena, solo si el string es el comienzo del bloque
-    if (ctrie->start_memory_block) free(ctrie->string);   
+    // Liberamos la cadena, solo si estamos en el comienzo del bloque
+    if (ctrie->startMemoryBlock) free(ctrie->string);   
 
     // Liberamos el nodo
     free(ctrie);
@@ -240,7 +240,7 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 
 
   // Si coinciden, solo se encuentra en el ctrie si el nodo tiene fin de palabra
-  if (string[i] == '\0' && i == ctrie->length) return ctrie->end_of_word;
+  if (string[i] == '\0' && i == ctrie->length) return ctrie->endOfWord;
 
   // Seguimos buscando el otro pedazo del string en los hijos del CTrie
   else if (i == ctrie->length) { 
@@ -267,8 +267,8 @@ void ctrie_iterate(CTrie ctrie) {
   
 
   printf("\n");
-  printf("Bloque: %d\n", ctrie->start_memory_block);
-  printf("Fin: %d\n", ctrie->end_of_word);
+  printf("Bloque: %d\n", ctrie->startMemoryBlock);
+  printf("Fin: %d\n", ctrie->endOfWord);
   printf("------------------\n");
 
 
@@ -286,7 +286,7 @@ int ctrie_node_length(CTrie ctrie) { return ctrie->length; }
 char ctrie_node_char(CTrie ctrie, int pos) { return ctrie->string[pos]; }
 
 
-int ctrie_end_of_word(CTrie ctrie) { return ctrie->end_of_word; }
+int ctrie_end_of_word(CTrie ctrie) { return ctrie->endOfWord; }
 
 
 CTrie ctrie_child(CTrie ctrie, int i) { return ctrie->childs[i]; }
