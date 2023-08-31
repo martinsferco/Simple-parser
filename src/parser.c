@@ -19,7 +19,7 @@ int parse_line(Dictionary dictionary, DinamicString string, FILE* file) {
 
   int i = 0;
 
-  while (dinamic_string_read(string, i) != '\n') { // Recorremos hasta llegar a fin de linea
+  while (dinamic_string_read(string, i) != '\n' && dinamic_string_read(string, i) != EOF) { // Recorremos hasta llegar a fin de linea
     
     int length = dictionary_largest_prefix(dictionary, string, i, file);
 
@@ -43,37 +43,6 @@ int parse_line(Dictionary dictionary, DinamicString string, FILE* file) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void parse_file(Dictionary dictionary, FILE* file) {
 
   // String dinamico donde iremos almacenando la linea leida
@@ -91,7 +60,7 @@ void parse_file(Dictionary dictionary, FILE* file) {
 
     dinamic_string_reset(string);  // Reseteamos string dinamico
     
-    //printf("\n"); // Seperamos parseo de lineas
+    printf("\n"); // Seperamos parseo de lineas
 
     // LIBERAMOS ERRORES
   }

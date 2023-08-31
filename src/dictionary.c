@@ -45,7 +45,7 @@ int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int p
       c = dinamic_string_add_end(string, file);
     
   
-  for (; c != '\n' && i < length && ctrie_node_char(dictionary, i) == c ; i++) {
+  for (; c != '\n' && c != EOF && i < length && ctrie_node_char(dictionary, i) == c ; i++) {
   
     if (pos + i + 1 < dinamic_string_used(string)) // Ya leimos este parte del archivo
         
@@ -54,6 +54,9 @@ int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int p
       else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
         c = dinamic_string_add_end(string, file);
+
+
+
   }
   
 
