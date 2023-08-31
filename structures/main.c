@@ -28,7 +28,7 @@ int main() {
   //assert (ctrie_search_string(dictionary, "dolar"));
   //assert (! ctrie_search_string(dictionary, "do"));
 
-  parse_file(dictionary, file_to_parse);
+  parse_file(dictionary, file_to_parse, NULL);
 
   //int l = dictionary_largest_prefix(dictionary, line);
 

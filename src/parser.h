@@ -5,10 +5,14 @@
 #include "../structures/queue.h"
 #include <stdio.h>
 
+typedef struct _ParseFiles ParseFiles;
 
-int parse_line(Dictionary dictionary, DString string, FILE* file, Queue errors);
+typedef struct _ParsedLine ParsedLine ;
 
-void parse_file(Dictionary dictionary, FILE* file);
+
+int parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files);
+
+void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file);
 
 
 #endif // __PARSER_H__
