@@ -7,7 +7,7 @@
 
 struct CTrieNode { // Estructura del nodo de nuestro CTrie
 
-  char* string;
+  char* string; 
 
   int length; // Largo de la cadena
 
@@ -276,8 +276,8 @@ int ctrie_node_length(CTrie ctrie) { return ctrie->length; }
 char ctrie_node_char(CTrie ctrie, int pos) { return ctrie->string[pos]; }
 
 
-
 int ctrie_end_of_word(CTrie ctrie) { return ctrie->end_of_word; }
+
 
 CTrie ctrie_child(CTrie ctrie, int i) { return ctrie->childs[i]; }
 

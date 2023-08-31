@@ -6,12 +6,22 @@ TEST_FLAGS = $(FLAGS) -g
 CC = gcc
 
 
-parser: main.c ctrie.
+all: parser #Compilamos el parser y eliminamos los archivos objeto
+	rm *.o 
 
-ctrie.o: ctrie.c ctrie.h
+parser: 
+
+# Compilacion de estructuras de datos base
+ctrie.o: structures/ctrie.c structures/ctrie.h
 	$(CC) -c $< $(CFLAGS)
 
-glist.o: glist.c glist.h
+glist.o: structures/glist.c structures/glist.h
+	$(CC) -c $< $(CFLAGS)
+
+dinamic_string.o: structures/dinamic_string.c structures/dinamic_string.h
+	$(CC) -c $< $(CFLAGS)
+
+gqueue.o: structures/gqueue.c structures/gqueue.h
 	$(CC) -c $< $(CFLAGS)
 
 

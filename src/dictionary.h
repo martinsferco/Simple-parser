@@ -43,6 +43,6 @@ void dictionary_destroy(Dictionary dictionary);
  * nos devuelve la maxima longitud de un prefijo que comienze en dicha
  * posicion.
 */
-int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int pos);
+int dictionary_largest_prefix(Dictionary dictionary, DinamicString string, int pos, FILE* file);
 
 #endif // __DICTIONARY_H__
