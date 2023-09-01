@@ -5,6 +5,7 @@
 #include <ctype.h>
 
 
+
 struct CTrieNode { // Estructura del nodo de nuestro CTrie
 
   char* string; 
@@ -19,6 +20,7 @@ struct CTrieNode { // Estructura del nodo de nuestro CTrie
   struct CTrieNode** childs; // Hijos del nodo
 
 };
+
 
 
 typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
@@ -38,9 +40,10 @@ static void lower_case_strcpy(char* destiny, char* origin) {
 
 
 
-
 CTrie ctrie_create() { return NULL; }
 
+
+int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
 
 
 static CTrie ctrie_create_node(char* string, int length, CopyOption option) { 
@@ -207,31 +210,6 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
 
 
 
-int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
-
-
-
-void ctrie_destroy(CTrie ctrie) {
-
-  if (! ctrie_empty(ctrie)) {
-
-    for (int i = 0 ; i < ALPHABET_SIZE ; i++)
-      
-      // Liberamos cada uno de los hijos
-      if (! ctrie_empty(ctrie->childs[i])) ctrie_destroy(ctrie->childs[i]);
-      
-    // Liberamos el arreglo de hijos
-    free(ctrie->childs);
-
-    // Liberamos la cadena, solo si estamos en el comienzo del bloque
-    if (ctrie->startMemoryBlock) free(ctrie->string);   
-
-    // Liberamos el nodo
-    free(ctrie);
-  }
-}
-
-
 int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 
   int i;
@@ -291,3 +269,24 @@ int ctrie_end_of_word(CTrie ctrie) { return ctrie->endOfWord; }
 
 CTrie ctrie_child(CTrie ctrie, int i) { return ctrie->childs[i]; }
 
+
+
+void ctrie_destroy(CTrie ctrie) {
+
+  if (! ctrie_empty(ctrie)) {
+
+    for (int i = 0 ; i < ALPHABET_SIZE ; i++)
+      
+      // Liberamos cada uno de los hijos
+      if (! ctrie_empty(ctrie->childs[i])) ctrie_destroy(ctrie->childs[i]);
+      
+    // Liberamos el arreglo de hijos
+    free(ctrie->childs);
+
+    // Liberamos la cadena, solo si estamos en el comienzo del bloque
+    if (ctrie->startMemoryBlock) free(ctrie->string);   
+
+    // Liberamos el nodo
+    free(ctrie);
+  }
+}

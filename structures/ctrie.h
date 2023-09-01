@@ -7,59 +7,70 @@
 
 
 
+typedef struct CTrieNode* CTrie; // Tipo CTrie
 
-typedef struct CTrieNode* CTrie; // Definimos el tipo CTrie
 
 
-/**
- * Crea un CTrie vacio.
-*/
+//! @brief Devuelve un nuevo CTrie vacio.
+//! @return El nuevo arbol vacio.
 CTrie ctrie_create();
 
 
-/**
- * Determina si el CTrie esta vacio.
-*/
+//! @brief Determina si un CTrie esta vacio.
+//! @param[in] ctrie: CTrie que queremos determinar si esta vacio. 
+//! @return 1 si esta vacio y 0 si no lo esta.
 int ctrie_empty(CTrie ctrie);
 
 
-/**
- * Dada una cadena, se encarga de insertarla en el CTrie.
-*/
+//! @brief Agrega una cadena a un CTrie.
+//! @param[out] ctrie: CTrie donde queremos agregar el string.
+//! @param[in] string: String que agregamos al CTrie.
+//! @return El mismo Ctrie, pero con el String agregado.
 CTrie ctrie_add_string(CTrie ctrie, char* string);
 
 
-/**
- * Destruye el CTrie pasado como argumento.
-*/
-void ctrie_destroy(CTrie ctrie);
-
-
-/**
- * Busca un string en el CTrie.
-*/
+//! @brief Busca un string en el CTrie.
+//! @param[in] ctrie: 
+//! @param[in] string:
+//! @return 
 int ctrie_search_string(CTrie ctrie, char* string);
 
 
-/**
- * Recorre el ctrie, en un orden dado, mostrando las cadenas de cada
- * uno de los nodos. Consideramos que se procesa el nodo, y luego se recorren
- * los subarboles de izquierda a derecha.
-*/
+//! @brief Recorre el CTrie, mostrando las cadenas de cada uno de los nodos.
+//! @param[in] ctrie CTrie que vamos a recorrer.
+//! @note Al recorrer, se procesa el nodo y luego los subarboles de izquierda
+//!       a derecha.
 void ctrie_iterate(CTrie ctrie);
 
 
+//! @brief Determina la longitud del string almacenado en la raiz del CTrie.
+//! @param[in] ctrie: CTrie del cual queremos saber la longitud del string de ru 
+//!                  raiz.
+//! @return Longitud del string de la raiz del CTrie.  
 int ctrie_node_length(CTrie ctrie);
 
 
+//! @brief Nos devuelve un caracter de una posicion determinada del string 
+//! @param[in] ctrie: 
+//! @param[in] pos: Posicion de la queremos obtener el caracter.
+//! @return Caracter en la posicion 'pos'  
 char ctrie_node_char(CTrie ctrie, int pos);
 
 
+//! @brief
+//! @param[in] ctrie: 
+//! @return 1 si 
 int ctrie_end_of_word(CTrie ctrie);
 
 
+//! @brief
+//! @param[in] ctrie:
+//! @return 
 CTrie ctrie_child(CTrie ctrie, int i);
 
 
+//! @brief Destruye un CTrie.
+//! @param[out] ctrie: CTrie que queremos destruir.
+void ctrie_destroy(CTrie ctrie);
 
 #endif // __CTRIE_H__
