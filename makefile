@@ -1,33 +1,47 @@
 # Makefile para compilar el TP Simple-parser.
 
 # Declaracion de banderas
-CFLAGS = -Wall -Wextra -Werror -std=c99
+CFLAGS = -std=c99
 TEST_FLAGS = $(FLAGS) -g
 CC = gcc
 
+# Directorios
+STR = structures/
+SRC = src/
 
-all: parser #Compilamos el parser y eliminamos los archivos objeto
+all: parser
 	rm *.o 
 
-parser: 
+
+parser: main.o dictionary.o parser.o ctrie.o glist.o dstring.o gqueue.o glist.o
+	$(CC) -o $^ $(CFLAGS)
+
+main.o: $(SRC)main.c
+	$(CC) -c $< $(CFLAGS)
+
+dictionary.o: $(SRC)dictionary.c $(SRC)dictionary.h
+	$(CC) -c $< $(CFLAGS)
+
+parser.o: $(SRC)parser.c $(SRC)parser.h
+	$(CC) -c $< $(CFLAGS)
+ 
 
 # Compilacion de estructuras de datos base
-ctrie.o: structures/ctrie.c structures/ctrie.h
+ctrie.o: $(STR)ctrie.c $(STR)ctrie.h
 	$(CC) -c $< $(CFLAGS)
 
-glist.o: structures/glist.c structures/glist.h
+glist.o: $(STR)glist.c $(STR)glist.h
 	$(CC) -c $< $(CFLAGS)
 
-dinamic_string.o: structures/dinamic_string.c structures/dinamic_string.h
+dstring.o: $(STR)dstring.c $(STR)dstring.h
 	$(CC) -c $< $(CFLAGS)
 
-gqueue.o: structures/gqueue.c structures/gqueue.h
-	$(CC) -c $< $(CFLAGS)
-
+gqueue.o: $(STR)gqueue.c $(STR)gqueue.h 
+	$(CC) $(CFLAGS) -c $< 
 
 clean:
-	rm *.o
 	rm parser
+	rm test
+
 
 .PHONY = clean
-.PHONY = test

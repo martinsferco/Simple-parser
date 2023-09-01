@@ -1,38 +1,38 @@
 #include "dictionary.h"
 #include "parser.h"
-
-#include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 
 int main(int argc, char** argv) {
 
   // Chequeamos la cantidad de argumentos
   if (argc != 4) {
-    printf("Cantidad de argumentos incorrecta... Finalizando programa.");
+    printf("Cantidad de argumentos incorrecta... Finalizando programa.\n");
     return 1;
   }
 
-  // Cargamos diccionario 
-  FILE* archivo_diccionario = fopen(argv[1], "r");
-  assert(archivo_diccionario);
+  // Abrimos archivo de diccionario
+  FILE* dictionary_file = fopen(argv[1], "r");
   
-  CTrie diccionario = ctrie_crear();
+  // Cargamos el diccionario
+  Dictionary dictionary = dictionary_create();
+  dictionary = dictionary_load_from_file(dictionary, dictionary_file);
 
   // Cerramos archivo de diccionario
-  fclose(archivo_diccionario);
+  fclose(dictionary_file);
   
+  // Abrimos el archivo de parseo, y el archivo donde guardaremos el parseo
+  FILE* file_to_parse = fopen(argv[2], "r");
+  FILE* parse_results = fopen(argv[3], "w");
 
-  FILE* archivo_entrada = fopen(argv[2], "r");
-  FILE* archivo_salida = fopen(argv[3], "w");
 
-
-
+  // Parseamos el archivo
+  parse_file(dictionary, file_to_parse, parse_results);
 
 
   // Cerramos los archivos de entrada y salida
-  fclose(archivo_entrada);
-  fclose(archivo_salida);
+  dictionary_destroy(dictionary);
+  fclose(file_to_parse);
+  fclose(parse_results);
 
   return 0;
 }

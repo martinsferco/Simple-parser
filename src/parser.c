@@ -36,6 +36,8 @@ static void* copy_char(void* charPointer) {
   return (void*) charCopy;
 }
 
+static void* id(void* data) {return data;}
+
 ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
   // Obtenemos el primer caracter para ver si llegamos a fin de linea
@@ -68,9 +70,13 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
     
     else { // No encontramos prefijo, nos movemos uno para delante
       
+      
+
       if (match) queue_enqueue(line.parsing_errors, &espacio, copy_char);
 
-      queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string,i), copy_char);
+      queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string,i), copy_char); // TODO VER COMO OPTIMIZAR
+      //queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string,i), id);
+      
       i++;
       match = 0;
     }

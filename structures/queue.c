@@ -54,7 +54,7 @@ void queue_dequeue_print(Queue queue, FILE* resultsFile) {
 
     fprintf(resultsFile, "%c", *charPointer);
   
-    free(charPointer);
+    //free(charPointer);
   }
 
   fprintf(resultsFile, "%s", "\n");
