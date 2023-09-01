@@ -39,6 +39,10 @@ void dstring_write(DString string, int pos, char c);
 void dstring_save_segment(DString string, int start, int length, FILE* destiny);
 
 
+
+void dstring_save_all(DString string, FILE* destiny);
+
+
 //! @brief Se encar
 //! @param[in] string:
 //! @return 
@@ -65,11 +69,14 @@ void dstring_extends(DString string);
 char* dstring_pointer_index(DString string, int i);
 
 
+
+void dstring_append(DString string, char c);
+
 //! @brief Se encar
 //! @param[in] string:
 //! @param[in] file:
 //! @return
-char dstring_add_end(DString string, FILE* file);
+char dstring_append_from_file(DString string, FILE* file);
 
 
 //! @brief Se encar

@@ -2,7 +2,7 @@
 #define __PARSER_H__
 
 #include "dictionary.h"
-#include "../structures/queue.h"
+#include "../structures/dstring.h"
 #include <stdio.h>
 
 typedef struct _ParseFiles ParseFiles;

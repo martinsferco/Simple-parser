@@ -14,12 +14,11 @@
 };
 
 
-
 DString dstring_create(int initialCapacity) {
 
-  // Pedimos uno adicional por el caracter de terminacion
   DString newString = malloc(sizeof(struct _DString));
 
+  // Pedimos uno adicional por el caracter de terminacion
   newString->chars= malloc(sizeof(void*) * (initialCapacity + 1));
   
   newString->capacity = initialCapacity;
@@ -69,6 +68,17 @@ void dstring_save_segment(DString string, int start, int length, FILE* destiny) 
 
 
 
+void dstring_save_all(DString string, FILE* destiny) {
+
+  for (int i = 0 ; string->chars[i] != '\0' ; i++)
+
+    fprintf(destiny,"%c", string->chars[i]);
+  
+  fprintf(destiny,"%s","\n");
+}
+
+
+
 
 int dstring_capacity(DString string) { return string->capacity; }
 
@@ -88,11 +98,7 @@ void dstring_extends(DString string) {
 
 
 
-
-
-char dstring_add_end(DString string, FILE* file) {
-
-  char c = fgetc(file);
+void dstring_append(DString string, char c) {
 
   // Si queremos agregar, y no tenemos suficiente espacio
   if (string->used == string->capacity) dstring_extends(string);
@@ -102,6 +108,14 @@ char dstring_add_end(DString string, FILE* file) {
   dstring_write(string, string->used + 1, '\0');
   
   string->used++; // Sumamos uno en la cantidad de usados
+}
+
+
+char dstring_append_from_file(DString string, FILE* file) {
+
+  char c = fgetc(file);
+
+  dstring_append(string, c);
 
   return c;
 }

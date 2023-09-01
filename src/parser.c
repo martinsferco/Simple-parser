@@ -13,7 +13,7 @@ struct _ParseFiles{
 struct _ParsedLine {
 
   DString string;
-  Queue parsing_errors;
+  DString parsing_errors;
 
 };
 
@@ -36,12 +36,17 @@ static void* copy_char(void* charPointer) {
   return (void*) charCopy;
 }
 
+
+
 static void* id(void* data) {return data;}
+
+
+
 
 ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
   // Obtenemos el primer caracter para ver si llegamos a fin de linea
-  char c = dstring_add_end(line.string, files.parse_file);
+  char c = dstring_append_from_file(line.string, files.parse_file);
 
   int match = 1;
 
@@ -56,7 +61,7 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   while (dstring_read(line.string, i) != '\n' && dstring_read(line.string, i) != EOF && dstring_read(line.string,i) != '\0') { // Recorremos hasta llegar a fin de linea
     
-    dstring_add_end(line.string, files.parse_file);
+    dstring_append_from_file(line.string, files.parse_file);
     
     int length = dictionary_largest_prefix(dictionary, line.string, i, files.parse_file);
 
@@ -71,12 +76,9 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
     else { // No encontramos prefijo, nos movemos uno para delante
       
       
+      if (match) dstring_append(line.parsing_errors, ' ');
 
-      if (match) queue_enqueue(line.parsing_errors, &espacio, copy_char);
-
-      queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string,i), copy_char); // TODO VER COMO OPTIMIZAR
-      //queue_enqueue(line.parsing_errors, dstring_pointer_index(line.string,i), id);
-      
+      dstring_append(line.parsing_errors, dstring_read(line.string, i));      
       i++;
       match = 0;
     }
@@ -94,12 +96,11 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
 
   ParsedLine line;
   line.string = dstring_create(INITIAL_READ_SIZE);
-  line.parsing_errors = queue_create();
+  line.parsing_errors = dstring_create(INITIAL_READ_SIZE);
 
   ParseFiles files;
   files.parse_file = parse_file;
   files.results_file = results_file;
-
 
 
   ParseResult result = NON_EMPTY_LINE;
@@ -114,14 +115,14 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
 
     else if (result == NON_EMPTY_LINE)
     
-      queue_dequeue_print(line.parsing_errors, files.results_file);
+      dstring_save_all(line.parsing_errors, files.results_file);
 
     dstring_reset(line.string);  // Reseteamos string dinamico
-  
+    dstring_reset(line.parsing_errors);
   }
 
   dstring_destroy(line.string);
-  queue_destroy(line.parsing_errors, skip);
+  dstring_destroy(line.parsing_errors);
 }
 
 

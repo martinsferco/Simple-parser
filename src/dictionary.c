@@ -31,6 +31,8 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
   
   int i = 0; // Indice que usaremos para recorrer string del nodo del diccionario
 
+  if (dictionary == NULL) return 0;
+
   int length = ctrie_node_length(dictionary);   
   
   char c;
@@ -42,7 +44,7 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
 
     else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
-      c = dstring_add_end(string, file);
+      c = dstring_append_from_file(string, file);
     
   
   for (; c != '\n' && c != EOF && i < length && ctrie_node_char(dictionary, i) == c ; i++) {
@@ -53,14 +55,10 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
 
       else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
-        c = dstring_add_end(string, file);
-
-
+        c = dstring_append_from_file(string, file);
 
   }
   
-
-
   // Si coinciden y terminamos de leer la cadena, devolvemos el largo del nodo
   // solamente si es un fin de palabra
   if ((c == '\n' || c == EOF) && i == length)
