@@ -71,7 +71,7 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
   else if (i == length) {
     
     // Hijo que debemos seguir
-    Dictionary child = ctrie_child(dictionary,(int)c - OFFSET); 
+    Dictionary child = ctrie_child(dictionary, c); 
 
 
     // Nos guardamos la longitud del nodo, si es fin de palabra, si no, es nulo

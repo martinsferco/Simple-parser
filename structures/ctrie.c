@@ -5,6 +5,9 @@
 #include <ctype.h>
 
 
+#define ALPHABET_SIZE 26 // Definimos el tamanio del alfabeto
+#define OFFSET (int)('a') // Definimos el valor ASCII de el caracter 'a'
+
 
 struct CTrieNode { // Estructura del nodo de nuestro CTrie
 
@@ -18,9 +21,7 @@ struct CTrieNode { // Estructura del nodo de nuestro CTrie
                                    // comienzo de un bloque de memoria 
 
   struct CTrieNode** childs; // Hijos del nodo
-
 };
-
 
 
 typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
@@ -31,7 +32,10 @@ typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
 } CopyOption;
 
 
-
+//! @brief Copia un string en otro lugar de memoria, haciendo minusculas todos 
+//!        sus caracteres.
+//! @param[out] destiny: Direccion donde guardaremos la copia del string.
+//! @param[in] origin: Direccion desde donde copiaremos el string.
 static void lower_case_strcpy(char* destiny, char* origin) {
 
   for (int i = 0 ; origin[i] != '\0' ; i++)
@@ -39,13 +43,11 @@ static void lower_case_strcpy(char* destiny, char* origin) {
 } 
 
 
-
-CTrie ctrie_create() { return NULL; }
-
-
-int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
-
-
+//! @brief Crea un nuevo nodo 
+//! @param[in] string: Apunta a
+//! @param[in] length: L
+//! @param[in] option: Si copiamos el st
+//! @return 
 static CTrie ctrie_create_node(char* string, int length, CopyOption option) { 
 
   CTrie newNode = malloc(sizeof(struct CTrieNode));
@@ -75,11 +77,10 @@ static CTrie ctrie_create_node(char* string, int length, CopyOption option) {
 }
 
 
-
-/**
- * Dados dos CTrie, la funcion intercambia todos los hijos de uno por los hijos
- * del otro y visceversa.
-*/
+//! @brief Dados dos CTries, intercambia los hijos de uno por los hijos del otro
+//         y visceversa.
+//! @param[out] ctrie1: CTrie que recibira los hijos de ctri2.
+//! @param[out] ctrie2: CTrie que recibira los hijos de ctri1.
 static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
 
   CTrie* childs = ctrie1->childs;
@@ -88,10 +89,10 @@ static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
 }
 
 
-
-/**
- * 
-*/
+//! @brief
+//! @param[out] ctri:
+//! @param[in] index:
+//! @return 
 static CTrie ctrie_extend_node(CTrie ctrie, int index) {
 
   // Creamos el nodo que sera la extension del nodo actual
@@ -114,14 +115,14 @@ static CTrie ctrie_extend_node(CTrie ctrie, int index) {
   ctrie->childs[(int)ctrie->string[index] - OFFSET] = newNode; 
 
   return ctrie;
-
 }
 
 
-
-/**
- * Esta funcion toma un CTrie, 
-*/
+//! @brief
+//! @param[out] ctrie:
+//! @param[in] string:
+//! @param[in] index:
+//! @return 
 static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 
   // Creamos el nodo en donde guardaremos la otra parte del string del nodo, 
@@ -156,17 +157,21 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 }
 
 
+CTrie ctrie_create() { return NULL; }
+
+
+int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
+
 
 CTrie ctrie_add_string(CTrie ctrie, char* string) {
 
   if (string == NULL) return ctrie; 
 
 
-  if (ctrie_empty(ctrie)) { // Si el CTrie esta vacio, agregamos la cadena
+  if (ctrie_empty(ctrie))  // Si el CTrie esta vacio, agregamos la cadena
                            // a un nuevo nodo
 
     return ctrie_create_node(string, strlen(string), PHYSIC_COPY);
-  }
 
 
   // Si el CTrie no esta vacio, tenemos que recorrer el string del nodo
@@ -209,7 +214,6 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
 }
 
 
-
 int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 
   int i;
@@ -232,7 +236,6 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
   // Cualquier otro caso, no se encuentra la palabra
   else return 0;
 }
-
 
 
 void ctrie_iterate(CTrie ctrie) {
@@ -267,8 +270,7 @@ char ctrie_node_char(CTrie ctrie, int pos) { return ctrie->string[pos]; }
 int ctrie_end_of_word(CTrie ctrie) { return ctrie->endOfWord; }
 
 
-CTrie ctrie_child(CTrie ctrie, int i) { return ctrie->childs[i]; }
-
+CTrie ctrie_child(CTrie ctrie, char c) { return ctrie->childs[(int)c - OFFSET]; }
 
 
 void ctrie_destroy(CTrie ctrie) {
