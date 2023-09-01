@@ -1,19 +1,19 @@
 #include "parser.h"
 
-#define INITIAL_READ_SIZE 500
+#define INITIAL_READ_SIZE 1000
 
 
 struct _ParseFiles{
 
-  FILE* parse_file;
-  FILE* results_file;
+  FILE* parseFile;
+  FILE* resultsFile;
 
 };
 
 struct _ParsedLine {
 
   DString string;
-  DString parsing_errors;
+  DString parsingErrors;
 
 };
 
@@ -27,26 +27,17 @@ enum _ParseResult {
 };
 
 
-static void* copy_char(void* charPointer) {
+static void save_parsing_errors(DString parsingErrors, FILE* resultsFile) {
 
-  char* charCopy = malloc(sizeof(char));
-
-  *charCopy = *((char*) charPointer);
-
-  return (void*) charCopy;
+  fprintf(resultsFile,"%s", "| PARSING ERRORS:");
+  dstring_save_all(parsingErrors, resultsFile);
 }
-
-
-
-static void* id(void* data) {return data;}
-
-
 
 
 ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files) {
 
   // Obtenemos el primer caracter para ver si llegamos a fin de linea
-  char c = dstring_append_from_file(line.string, files.parse_file);
+  char c = dstring_append_from_file(line.string, files.parseFile);
 
   int match = 1;
 
@@ -61,13 +52,13 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   while (dstring_read(line.string, i) != '\n' && dstring_read(line.string, i) != EOF && dstring_read(line.string,i) != '\0') { // Recorremos hasta llegar a fin de linea
     
-    dstring_append_from_file(line.string, files.parse_file);
+    dstring_append_from_file(line.string, files.parseFile);
     
-    int length = dictionary_largest_prefix(dictionary, line.string, i, files.parse_file);
+    int length = dictionary_largest_prefix(dictionary, line.string, i, files.parseFile);
 
     if (length) { // Si encontramos un prefijo
 
-      dstring_save_segment(line.string, i, length, files.results_file);
+      dstring_save_segment(line.string, i, length, files.resultsFile);
       i += length;
       match = 1;
     }
@@ -76,9 +67,9 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
     else { // No encontramos prefijo, nos movemos uno para delante
       
       
-      if (match) dstring_append(line.parsing_errors, ' ');
+      if (match) dstring_append(line.parsingErrors, ' ');
 
-      dstring_append(line.parsing_errors, dstring_read(line.string, i));      
+      dstring_append(line.parsingErrors, dstring_read(line.string, i));      
       i++;
       match = 0;
     }
@@ -91,16 +82,16 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 static void skip(void* data) { return; }
 
 
-void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
+void parse_file(Dictionary dictionary, FILE* parseFile, FILE* resultsFile) {
 
 
   ParsedLine line;
   line.string = dstring_create(INITIAL_READ_SIZE);
-  line.parsing_errors = dstring_create(INITIAL_READ_SIZE);
+  line.parsingErrors = dstring_create(INITIAL_READ_SIZE);
 
   ParseFiles files;
-  files.parse_file = parse_file;
-  files.results_file = results_file;
+  files.parseFile = parseFile;
+  files.resultsFile = resultsFile;
 
 
   ParseResult result = NON_EMPTY_LINE;
@@ -111,18 +102,18 @@ void parse_file(Dictionary dictionary, FILE* parse_file, FILE* results_file) {
     
     if (result == EMPTY_LINE) 
       
-      fprintf(results_file, "%s", "LINEA VACIA\n");
+      fprintf(resultsFile, "%s", "LINEA VACIA\n");
 
     else if (result == NON_EMPTY_LINE)
     
-      dstring_save_all(line.parsing_errors, files.results_file);
+      save_parsing_errors(line.parsingErrors, files.resultsFile);
 
     dstring_reset(line.string);  // Reseteamos string dinamico
-    dstring_reset(line.parsing_errors);
+    dstring_reset(line.parsingErrors);
   }
 
   dstring_destroy(line.string);
-  dstring_destroy(line.parsing_errors);
+  dstring_destroy(line.parsingErrors);
 }
 
 
