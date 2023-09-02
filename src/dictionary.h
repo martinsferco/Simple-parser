@@ -19,6 +19,11 @@ typedef CTrie Dictionary; // Tipo Dictionary
 Dictionary dictionary_create();
 
 
+//! @brief Destruye un diccionario.
+//! @param[out] dictionary: Diccionario que queremos destruir.
+void dictionary_destroy(Dictionary dictionary);
+
+
 //! @brief Carga el diccionario a partir de las cadenas que se encuentran en
 //!        un archivo.
 //! @param[out] dictionary: Dictionary que queremos cargar.
@@ -32,9 +37,6 @@ Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file);
 void dictionary_iterate(Dictionary dictionary);
 
 
-//! @brief Destruye un diccionario.
-//! @param[out] dictionary: Diccionario que queremos destruir.
-void dictionary_destroy(Dictionary dictionary);
 
 
 //! @brief Busca la maxima longitud de prefijo valido desde una determinada 

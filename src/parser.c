@@ -37,6 +37,7 @@ static void save_parsing_errors(DString parsingErrors, FILE* resultsFile) {
 
   fprintf(resultsFile,"%s", "| PARSING ERRORS:");
   dstring_save_segment(parsingErrors, 0, dstring_used(parsingErrors), resultsFile);
+  fprintf(resultsFile,"%c", '\n');
 }
 
 
