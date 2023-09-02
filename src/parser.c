@@ -1,23 +1,26 @@
 #include "parser.h"
 
-#define INITIAL_READ_SIZE 1000
+
+#define INITIAL_SIZE 1000 // Capacidad inicial de un DString. 
 
 
-struct _ParseFiles{
+// Estructura que almacena punteros a los archivo a parsear y el de resultados.
+struct _ParseFiles{ 
 
   FILE* parseFile;
   FILE* resultsFile;
 
 };
 
+// Estructura que almacena la linea leida del archivo, y los errores del parseo.
 struct _ParsedLine {
 
   DString string;
   DString parsingErrors;
 
-};
+}; 
 
-
+// Enumeracion de las posibles situaciones al parsear una linea.
 enum _ParseResult {
 
   END_OF_FILE,
@@ -27,10 +30,14 @@ enum _ParseResult {
 };
 
 
+//! @brief Se encarga de guardar en un archivo los errores de parseo.
+//! @param[in] parsingErrors: DString que almaceno los errores resultantes del 
+//!                           parseo de una linea.
+//! @param[out] resultsFile: Puntero al archivo donde guardamos los errores.
 static void save_parsing_errors(DString parsingErrors, FILE* resultsFile) {
 
   fprintf(resultsFile,"%s", "| PARSING ERRORS:");
-  dstring_save_all(parsingErrors, resultsFile);
+  dstring_save_segment(parsingErrors, 0, dstring_used(parsingErrors), resultsFile);
 }
 
 
@@ -86,8 +93,8 @@ void parse_file(Dictionary dictionary, FILE* parseFile, FILE* resultsFile) {
 
 
   ParsedLine line;
-  line.string = dstring_create(INITIAL_READ_SIZE);
-  line.parsingErrors = dstring_create(INITIAL_READ_SIZE);
+  line.string = dstring_create(INITIAL_SIZE);
+  line.parsingErrors = dstring_create(INITIAL_SIZE);
 
   ParseFiles files;
   files.parseFile = parseFile;
