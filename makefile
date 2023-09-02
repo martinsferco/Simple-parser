@@ -9,15 +9,18 @@ STR = structures/
 SRC = src/
 
 
-all: main
+all: program
 	rm *.o
 
 clean:
 	rm parser
 
 
-main: $(SRC)main.c dictionary.o parser.o ctrie.o dstring.o
+program: $(SRC)main.c dictionary.o parser.o ctrie.o dstring.o
 	$(CC) $^ $(CFLAGS) -o parser
+
+
+
 
 parser.o: $(SRC)parser.c $(SRC)parser.h dstring.o
 	$(CC) -c $< $(CFLAGS)

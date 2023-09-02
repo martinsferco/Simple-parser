@@ -1,7 +1,7 @@
 #include "tests.h"
 #include "../structures/dstring.h"
 
-void test_dstring_extends() {} // STATIC
+// void test_dstring_extends() {} // STATIC
 void test_dstring_create() { }
 void test_dstring_read() { }
 void test_dstring_save_segment() {}

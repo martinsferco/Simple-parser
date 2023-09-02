@@ -227,6 +227,8 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
 
 int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 
+  if (ctrie == NULL) return 0;
+
   int i;
 
   for (i = 0 ; ctrie->string[i] == tolower(string[i]) && string[i] != '\0' && i < ctrie->length ; i++);
@@ -241,7 +243,7 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
     CTrie child = ctrie->childs[(int)tolower(string[i]) - OFFSET];
 
     // Solo buscamos si existe el hijo
-    return child ? ctrie_search_string(child, string + i) : 0;
+    return ctrie_search_string(child, string + i);
   }
 
   // Cualquier otro caso, no se encuentra la palabra

@@ -20,14 +20,3 @@ int compare_files(FILE* file1, FILE* file2) {
 
   return c1 == EOF && c2 == EOF && equal;
 }
-
-
-int main() {
-
-  FILE* file1 = fopen("../dictionaries/prueba.txt", "r");
-  FILE* file2 = fopen("../dictionaries/prueba2.txt", "r");
-
-  if (compare_files(file1,file2)) printf("sape");
-
-  return 0;
-}
