@@ -13,6 +13,17 @@
 
 };
 
+//! @brief Extiende la capacidad de un DString.
+//! @param[out] string: DString al cual queremos extender su capacidad.
+static void dstring_extends(DString string) {
+  
+  // Cambiamos a la nueva capacidad
+  string->capacity = (string->capacity - 1) * (1 + RESIZE_FACTOR); 
+
+  // Realocamos el arreglo de los datos
+  string->chars = realloc(string->chars, sizeof(char) * string->capacity + 1);
+}
+
 
 DString dstring_create(int initialCapacity) {
 
@@ -41,20 +52,13 @@ void dstring_destroy(DString string) {
 }
 
 
-// Consideramos que la posicion es correcta
-char dstring_read(DString string, int pos) { 
-  
-  return string->chars[pos];
-}
+char dstring_read(DString string, int pos) { return string->chars[pos]; }
 
 
-
-// Consideramos que la posicion es correcta
 void dstring_write(DString string, int pos, char c) {
   
   string->chars[pos] = c;
 }
-
 
 
 void dstring_save_segment(DString string, int start, int length, FILE* destiny) {
@@ -67,35 +71,7 @@ void dstring_save_segment(DString string, int start, int length, FILE* destiny) 
 }
 
 
-
-void dstring_save_all(DString string, FILE* destiny) {
-
-  for (int i = 0 ; string->chars[i] != '\0' ; i++)
-
-    fprintf(destiny,"%c", string->chars[i]);
-  
-  fprintf(destiny,"%s","\n");
-}
-
-
-
-
-int dstring_capacity(DString string) { return string->capacity; }
-
-
 int dstring_used(DString string) { return string->used; }
-
-
-
-void dstring_extends(DString string) {
-  
-  // Cambiamos a la nueva capacidad
-  string->capacity = (string->capacity - 1) * (1 + RESIZE_FACTOR); 
-
-  // Realocamos el arreglo de los datos
-  string->chars = realloc(string->chars, sizeof(char) * string->capacity + 1);
-}
-
 
 
 void dstring_append(DString string, char c) {
@@ -121,9 +97,6 @@ char dstring_append_from_file(DString string, FILE* file) {
 }
 
 
-
-
 void dstring_reset(DString string) { string->used = 0; } 
 
 
-char* dstring_pointer_index(DString string, int i) { return string->chars + i; }
