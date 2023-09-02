@@ -5,23 +5,26 @@
 #include <ctype.h>
 
 
+
 #define ALPHABET_SIZE 26 // Definimos el tamanio del alfabeto
 #define OFFSET (int)('a') // Definimos el valor ASCII de el caracter 'a'
 
 
-struct CTrieNode { // Estructura del nodo de nuestro CTrie
 
-  char* string; 
+struct CTrieNode { // Estructura de un nodo del CTrie
 
-  int length; // Largo de la cadena
+  char* string;  // Inicio de la cadena almacenada
+
+  int length; // Largo de la cadena almacenada
 
   unsigned int endOfWord; // Vemos si llegamos hasta un fin de cadena
 
   unsigned int startMemoryBlock; // Vemos si en el nodo, 'string' apunta al 
-                                   // comienzo de un bloque de memoria 
+                                 // comienzo de un bloque de memoria 
 
   struct CTrieNode** childs; // Hijos del nodo
 };
+
 
 
 typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
@@ -30,6 +33,7 @@ typedef enum { // Definimos las opciones de copiado, al crear un nuevo nodo
   POINTER_COPY,
 
 } CopyOption;
+
 
 
 //! @brief Copia un string en otro lugar de memoria, haciendo minusculas todos 
@@ -43,11 +47,13 @@ static void lower_case_strcpy(char* destiny, char* origin) {
 } 
 
 
-//! @brief Crea un nuevo nodo 
-//! @param[in] string: Apunta a
-//! @param[in] length: L
-//! @param[in] option: Si copiamos el st
-//! @return 
+//! @brief Crea un nuevo nodo que insertaremos al CTrie.
+//! @param[in] string: Apunta al comienzo del string que ira en el nuevo nodo.
+//! @param[in] length: Largo de la cadena del nuevo nodo.
+//! @param[in] option: PHYSIC_COPY: Pedimos memoria y copiamos el string.
+//!                    POINTER_COPY: Guardamos la direccion del string pasado.
+//! @return El nuevo nodo inicializado con el string y largo, con todos los 
+//!         hijos vacios. 
 static CTrie ctrie_create_node(char* string, int length, CopyOption option) { 
 
   CTrie newNode = malloc(sizeof(struct CTrieNode));
@@ -89,11 +95,13 @@ static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
 }
 
 
-//! @brief
-//! @param[out] ctri:
-//! @param[in] index:
-//! @return 
-static CTrie ctrie_extend_node(CTrie ctrie, int index) {
+//! @brief Divide un nodo en dos partes, colocando la segunda parte como hijo
+//!        de la primera.
+//! @param[out] ctrie: CTrie del cual queremos hacer la extension.
+//! @param[in] index: Indice a partir del cual vamos a hacer la division.
+//! @return El mismo nodo, pero con menor largo de palabra y tiene como hijo
+//!         a otro nodo, con la otra parte de la palabra.
+static CTrie ctrie_split_node(CTrie ctrie, int index) {
 
   // Creamos el nodo que sera la extension del nodo actual
   CTrie newNode = ctrie_create_node(ctrie->string + index, ctrie->length - index,
@@ -103,7 +111,7 @@ static CTrie ctrie_extend_node(CTrie ctrie, int index) {
   ctrie->length = index; // Actualizamos largo string
 
   newNode->endOfWord = ctrie->endOfWord; // Sera fin de palabra si la 
-                                              // origina lo era 
+                                         // origina lo era 
   
   ctrie->endOfWord = 1; // El nodo actual pasa a ser un fin de palabra
 
@@ -118,11 +126,14 @@ static CTrie ctrie_extend_node(CTrie ctrie, int index) {
 }
 
 
-//! @brief
-//! @param[out] ctrie:
-//! @param[in] string:
-//! @param[in] index:
-//! @return 
+//! @brief Realiza una bifurcacion a partir de un indice y un nuevo string.
+//! @param[out] ctrie: CTrie en donde realizaremos la bifurcacion.
+//! @param[in] string: String que sera parte de uno de los nodos de la
+//!                    bifurcaion.
+//! @param[in] index: Indice a partir del cual realizarmos la bifurcacion.
+//! @return El mismo nodo, pero con menor largo de palabra, y tiene como nuevos 
+//!         hijos a un nodo con la segunda parte de su string y todos sus hijos,
+//!         y otro que tiene al string pasado como argumento.
 static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 
   // Creamos el nodo en donde guardaremos la otra parte del string del nodo, 
@@ -168,8 +179,8 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   if (string == NULL) return ctrie; 
 
 
-  if (ctrie_empty(ctrie))  // Si el CTrie esta vacio, agregamos la cadena
-                           // a un nuevo nodo
+  if (ctrie_empty(ctrie))  // Si el CTrie esta vacio, agregamos toda la cadena
+                           // a un nuevo nodo.
 
     return ctrie_create_node(string, strlen(string), PHYSIC_COPY);
 
@@ -192,7 +203,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   // CASO 2: La palabra es mas chica que el string del nodo y coincidio en todo 
   else if (string[i] == '\0') 
     
-    ctrie = ctrie_extend_node(ctrie, i);
+    ctrie = ctrie_split_node(ctrie, i);
 
 
   // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 

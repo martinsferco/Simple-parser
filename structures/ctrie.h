@@ -22,6 +22,7 @@ int ctrie_empty(CTrie ctrie);
 //! @return El mismo Ctrie, pero con el String agregado.
 CTrie ctrie_add_string(CTrie ctrie, char* string);
 
+
 //? VER SI INCLUIR ESTA FUNCION
 //! @brief Busca un string en un CTrie.
 //! @param[in] ctrie: CTrie en donde quremos buscar el string.
