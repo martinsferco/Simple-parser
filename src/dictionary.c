@@ -93,5 +93,3 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
 
 
 void dictionary_iterate(Dictionary dictionary) { ctrie_iterate(dictionary); }
-
-

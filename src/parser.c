@@ -4,7 +4,6 @@
 #define INITIAL_SIZE 1000 // Capacidad inicial de un DString. 
 
 
-// Estructura que almacena punteros a los archivo a parsear y el de resultados.
 struct _ParseFiles{ 
 
   FILE* parseFile;
