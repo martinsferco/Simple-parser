@@ -71,7 +71,7 @@ void dstring_save_segment(DString string, int start, int length, FILE* destiny) 
 }
 
 
-int dstring_used(DString string) { return string->used; }
+inline int dstring_used(DString string) { return string->used; }
 
 
 void dstring_append(DString string, char c) {
@@ -97,6 +97,7 @@ char dstring_append_from_file(DString string, FILE* file) {
 }
 
 
-void dstring_reset(DString string) { string->used = 0; } 
+inline void dstring_reset(DString string) { string->used = 0; } 
 
 
+inline char dstring_last(DString string) { return string->chars[string->used - 1]; }

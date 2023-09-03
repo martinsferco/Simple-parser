@@ -23,7 +23,6 @@ int ctrie_empty(CTrie ctrie);
 CTrie ctrie_add_string(CTrie ctrie, char* string);
 
 
-//? VER SI INCLUIR ESTA FUNCION
 //! @brief Busca un string en un CTrie.
 //! @param[in] ctrie: CTrie en donde quremos buscar el string.
 //! @param[in] string: String que queremos buscar.
@@ -31,7 +30,6 @@ CTrie ctrie_add_string(CTrie ctrie, char* string);
 int ctrie_search_string(CTrie ctrie, char* string);
 
 
-// ? VER SI INCLUIR ESTA FUNCION
 //! @brief Recorre el CTrie, mostrando las cadenas de cada uno de los nodos.
 //! @param[in] ctrie CTrie que vamos a recorrer.
 //! @note Al recorrer, se procesa el nodo y luego los subarboles de izquierda

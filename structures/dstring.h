@@ -72,4 +72,7 @@ char dstring_append_from_file(DString string, FILE* file);
 void dstring_reset(DString string); 
 
 
+
+char dstring_last(DString string);
+
 #endif // __DSTRING_H__

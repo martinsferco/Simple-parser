@@ -171,10 +171,10 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 }
 
 
-CTrie ctrie_create() { return NULL; }
+inline CTrie ctrie_create() { return NULL; }
 
 
-int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
+inline int ctrie_empty(CTrie ctrie) { return ctrie == NULL; }
 
 
 CTrie ctrie_add_string(CTrie ctrie, char* string) {
@@ -257,17 +257,18 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 void ctrie_iterate(CTrie ctrie) {
 
   if (ctrie_empty(ctrie)) return;
-  printf("------------------\n");
-  for (int i = 0 ; i < ctrie->length ; i++) // Imprimimos los caracteres del string
   
+  printf("------------------\n");
+  
+  for (int i = 0 ; i < ctrie->length ; i++) // Imprimimos los caracteres del string
     printf("%c",ctrie->string[i]);
   
-
   printf("\n");
-  printf("Bloque: %d\n", ctrie->startMemoryBlock);
-  printf("Fin: %d\n", ctrie->endOfWord);
-  printf("------------------\n");
 
+  printf("Comienzo bloque memoria: %d\n", ctrie->startMemoryBlock);
+  printf("Fin de palabra: %d\n", ctrie->endOfWord);
+  
+  printf("------------------\n");
 
   for (int i = 0 ; i < ALPHABET_SIZE ; i++) // Visitamos los hijos
 
@@ -275,18 +276,16 @@ void ctrie_iterate(CTrie ctrie) {
 }
 
 
+inline int ctrie_node_length(CTrie ctrie) { return ctrie->length; }
 
 
-int ctrie_node_length(CTrie ctrie) { return ctrie->length; }
+inline char ctrie_node_char(CTrie ctrie, int pos) { return ctrie->string[pos];}
 
 
-char ctrie_node_char(CTrie ctrie, int pos) { return ctrie->string[pos]; }
+inline int ctrie_end_of_word(CTrie ctrie) { return ctrie->endOfWord; }
 
 
-int ctrie_end_of_word(CTrie ctrie) { return ctrie->endOfWord; }
-
-
-CTrie ctrie_child(CTrie ctrie, char c) { return ctrie->childs[(int)c - OFFSET]; }
+inline CTrie ctrie_child(CTrie ctrie, char c) { return ctrie->childs[(int)c - OFFSET];}
 
 
 void ctrie_destroy(CTrie ctrie) {
