@@ -37,8 +37,6 @@ Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file);
 void dictionary_iterate(Dictionary dictionary);
 
 
-
-
 //! @brief Busca la maxima longitud de prefijo valido desde una determinada 
 //!        posicion de una cadena, en funcion de un diccionario. 
 //! @param[in] dictionary: Diccionario de donde buscamos las palabras validas.
@@ -46,7 +44,7 @@ void dictionary_iterate(Dictionary dictionary);
 //!                     guardando los caracteres todavia no leidos del archivo.
 //! @param[in] pos: Posicion desde donde queremos hacer la busqueda.
 //! @param[in] file: Puntero a archivo del que queremos parsear la linea.
-//! @return La maxima longitud de prefijo.
+//! @return La maxima longitud de prefijo desde la posicion indicada.
 int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FILE* file);
 
 #endif // __DICTIONARY_H__

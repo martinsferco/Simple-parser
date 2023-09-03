@@ -1,6 +1,22 @@
 #include "dictionary.h"
 
 
+static char get_parse_char(DString string, int pos, int i, FILE* parseFile) {
+
+  char c;
+
+  if (pos < dstring_used(string)) // Ya leimos este parte del archivo
+      
+      c = dstring_read(string, pos + i);  
+
+    else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
+
+      c = dstring_append_from_file(string, parseFile);
+  
+  return c;
+}
+
+
 
 Dictionary dictionary_create() { return ctrie_create(); }
 
@@ -11,24 +27,22 @@ Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file) { // TOD
 
   char buffer[READ_SIZE];
 
-  while (EOF != fscanf(file, "%[^\n]\n", buffer)) { 
+  while (fscanf(file, "%[^\n]\n", buffer) != EOF) 
     
     dictionary = ctrie_add_string(dictionary, buffer);
 
-  }
   return dictionary;
 }
 
 
-void dictionary_destroy(Dictionary dictionary) { ctrie_destroy(dictionary); }
-
-
-
+inline void dictionary_destroy(Dictionary dictionary) { ctrie_destroy(dictionary); }
 
 
 
 int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FILE* file) {
   
+  
+
   int i = 0; // Indice que usaremos para recorrer string del nodo del diccionario
 
   if (dictionary == NULL) return 0;
@@ -37,28 +51,15 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
   
   char c;
 
-  // Todo podemos modularizar esta parte
-  if (pos < dstring_used(string)) // Ya leimos este parte del archivo
-      
-      c = dstring_read(string, pos + i);  
 
-    else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
-
-      c = dstring_append_from_file(string, file);
+  c = get_parse_char(string, pos, 0, file);
+  
+  for (; c != '\n' && c != EOF && i < length && ctrie_node_char(dictionary, i) == c ; i++)
     
-  
-  for (; c != '\n' && c != EOF && i < length && ctrie_node_char(dictionary, i) == c ; i++) {
-  
-    if (pos + i + 1 < dstring_used(string)) // Ya leimos este parte del archivo
-        
-        c = dstring_read(string, pos + i + 1);  
+    c = get_parse_char(string, pos + i + 1, i, file);
 
-      else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
-        c = dstring_append_from_file(string, file);
 
-  }
-  
   // Si coinciden y terminamos de leer la cadena, devolvemos el largo del nodo
   // solamente si es un fin de palabra
   if ((c == '\n' || c == EOF) && i == length)
@@ -92,4 +93,4 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
 }
 
 
-void dictionary_iterate(Dictionary dictionary) { ctrie_iterate(dictionary); }
+inline void dictionary_iterate(Dictionary dictionary) { ctrie_iterate(dictionary); }

@@ -35,6 +35,10 @@ enum _ParseResult {
 //! @param[out] resultsFile: Puntero al archivo donde guardamos los errores.
 static void save_parsing_errors(DString parsingErrors, FILE* resultsFile) {
 
+  if (dstring_used(parsingErrors) == 0)
+    
+    fprintf(resultsFile,"%s", "| NO PARSING ERRORS");
+
   fprintf(resultsFile,"%s", "| PARSING ERRORS:");
   dstring_save_segment(parsingErrors, 0, dstring_used(parsingErrors), resultsFile);
   fprintf(resultsFile,"%c", '\n');
@@ -59,7 +63,8 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   while (dstring_read(line.string, i) != '\n' && dstring_read(line.string, i) != EOF && dstring_read(line.string,i) != '\0') { // Recorremos hasta llegar a fin de linea
     
-    dstring_append_from_file(line.string, files.parseFile);
+    if (dstring_last(line.string) != '\n')
+      dstring_append_from_file(line.string, files.parseFile);
     
     int length = dictionary_largest_prefix(dictionary, line.string, i, files.parseFile);
 
@@ -86,9 +91,6 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 }
 
 
-static void skip(void* data) { return; }
-
-
 void parse_file(Dictionary dictionary, FILE* parseFile, FILE* resultsFile) {
 
 
@@ -109,13 +111,14 @@ void parse_file(Dictionary dictionary, FILE* parseFile, FILE* resultsFile) {
     
     if (result == EMPTY_LINE) 
       
-      fprintf(resultsFile, "%s", "LINEA VACIA\n");
+      fprintf(resultsFile, "%s", "EMPTY LINE\n");
 
     else if (result == NON_EMPTY_LINE)
     
       save_parsing_errors(line.parsingErrors, files.resultsFile);
 
-    dstring_reset(line.string);  // Reseteamos string dinamico
+
+    dstring_reset(line.string);  
     dstring_reset(line.parsingErrors);
   }
 
