@@ -142,10 +142,13 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
                                                   ctrie->length - index,
                                                   POINTER_COPY);
 
-
-  ctrie->length = index; // Actualizamos largo string
+  // Solo es fin de palabra si el nodo a bifurcar lo era
+  stringPartitionNode->endOfWord = ctrie->endOfWord; 
 
   ctrie->endOfWord = 0; // AL haberse particionado, no es mas fin de palabra
+  
+  ctrie->length = index; // Actualizamos largo string
+
 
 
   // Los hijos del nodo resultante de la particion del string del nodo actual, 
@@ -231,7 +234,7 @@ int ctrie_search_string(CTrie ctrie, char* string) { // TODO CORREGIR
 
   int i;
 
-  for (i = 0 ; ctrie->string[i] == tolower(string[i]) && string[i] != '\0' && i < ctrie->length ; i++);
+  for (i = 0 ; i < ctrie->length && ctrie->string[i] == tolower(string[i]) && string[i] != '\0' ; i++);
 
 
   // Si coinciden, solo se encuentra en el ctrie si el nodo tiene fin de palabra
