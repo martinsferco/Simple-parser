@@ -1,10 +1,6 @@
 #include "tests.h"
 #include "../structures/dstring.h"
 
-// void test_dstring_extends() {} // STATIC
-
-//void test_dstring_create() 
-
 
 void test_dstring_read() { 
 
@@ -22,7 +18,9 @@ void test_dstring_read() {
 }
 
 
+
 void test_dstring_save_segment() {} // HACER
+
 
 
 void test_dstring_used() {
@@ -39,13 +37,14 @@ void test_dstring_used() {
 }
 
 
+
 void test_dstring_append() {
 
-  DString string = dstring_create(100);
+  DString string = dstring_create(20);
 
   char letters[] = "abcdefghijklmnopqrstuvwxyz";
   
-  for (int i = 0 ; i < 100 ; i++) {
+  for (int i = 0 ; i < 26 ; i++) {
 
     dstring_append(string, letters[i]);
     assert(dstring_read(string, dstring_used(string) - 1) == letters[i]);
@@ -54,6 +53,7 @@ void test_dstring_append() {
   dstring_destroy(string);
   
 }
+
 
 
 void test_dstring_reset() {

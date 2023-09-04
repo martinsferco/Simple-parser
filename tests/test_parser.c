@@ -6,20 +6,22 @@ void test_parse_file() {
 
   Dictionary dictionary = dictionary_create();
 
-  FILE* dicFile = fopen("../dictionaries/small_dictionary.txt","r");
+  FILE* dicFile = fopen("dictionaries/small_dictionary.txt","r");
 
   dictionary = dictionary_load_from_file(dictionary, dicFile);
 
   fclose(dicFile);
 
-  FILE* parseFile = fopen("../dictionaries/prueba.txt", "r");
-  FILE* resultsFile = fopen("../dictionaries/parseResult.txt", "w");
+  FILE* parseFile = fopen("testdata/prueba.txt", "r");
+  FILE* resultsFile = fopen("testdata/parseResult.txt", "w+");
 
   parse_file(dictionary, parseFile, resultsFile);
 
   fclose(parseFile);
 
-  FILE* expectedResultsFile = fopen("../dictionaries/result1.txt", "r");
+  FILE* expectedResultsFile = fopen("testdata/result.txt", "r");
+
+  fseek(resultsFile, 0, SEEK_SET);
 
   assert(compare_files(resultsFile, expectedResultsFile));
 }

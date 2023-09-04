@@ -1,7 +1,6 @@
 #include "compare_files.h"
 
 
-
 int compare_files(FILE* file1, FILE* file2) {
 
   char c1;

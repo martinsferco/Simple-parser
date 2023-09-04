@@ -56,7 +56,7 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   if (c == '\n') return EMPTY_LINE; // No llegamos al final del archivo, pero es linea vacia
 
-  int match = 0;
+  int match = 1;
 
   int i = 0;
 

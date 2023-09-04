@@ -18,7 +18,7 @@ void test_dictionary_load_from_file() {
 
   Dictionary dictionary = dictionary_create();
 
-  FILE* file = fopen("../dictionaries/big_dictionary.txt", "r");
+  FILE* file = fopen("dictionaries/big_dictionary.txt", "r");
 
   dictionary = dictionary_load_from_file(dictionary, file);
 
@@ -30,15 +30,15 @@ void test_dictionary_load_from_file() {
 
     assert(ctrie_search_string(dictionary, word));
 
-  fclose(file);
   dictionary_destroy(dictionary);
+  fclose(file);
 }
 
 
 
 void test_dictionary_largest_prefix() {
 
-  FILE* dictionaryFile = fopen("../dictionaries/small_dictionary.txt", "r");
+  FILE* dictionaryFile = fopen("dictionaries/small_dictionary.txt", "r");
 
   Dictionary dictionary = dictionary_create();
 
@@ -46,7 +46,7 @@ void test_dictionary_largest_prefix() {
 
   fclose(dictionaryFile);
 
-  FILE* parserFile = fopen("../dictionaries/prueba.txt", "r");
+  FILE* parserFile = fopen("testdata/prueba.txt", "r");
 
   DString string = dstring_create(100);
 

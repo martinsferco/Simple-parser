@@ -1,8 +1,5 @@
 #include "tests.h"
 
-
-
-
 int main() {
 
   // Funcion de testeo de comparacion de archivos
@@ -50,10 +47,9 @@ int main() {
 
 void test_compare_files() {
 
-  FILE* file1 = fopen("../dictionaries/prueba.txt", "r");
-  FILE* file2 = fopen("../dictionaries/prueba.txt", "r");
-  FILE* file3 = fopen("../dictionaries/prueba2.txt", "r");
-  FILE* file4 = fopen("../dictionaries/small_dictionary.txt", "r");
+  FILE* file1 = fopen("testdata/prueba.txt", "r");
+  FILE* file2 = fopen("testdata/prueba_copy.txt", "r");
+  FILE* file3 = fopen("testdata/parseResult.txt", "r");
 
   assert(compare_files(file1, file2));
   fseek(file1, 0, SEEK_SET);
@@ -61,12 +57,11 @@ void test_compare_files() {
   assert(compare_files(file2, file1));
   fseek(file1, 0, SEEK_SET);
   fseek(file2, 0, SEEK_SET);
-  assert(compare_files(file1, file3));
+  assert(! compare_files(file1, file3));
   fseek(file3, 0, SEEK_SET);
-  assert(compare_files(file2, file3));
+  assert(! compare_files(file2, file3));
   
   fclose(file1);  
   fclose(file2);  
   fclose(file3);  
-  fclose(file4);  
 }

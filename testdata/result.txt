@@ -1,0 +1,8 @@
+dolar recibira | PARSING ERRORS: x 
+quien deposite dolares recibira dolares | NO PARSING ERRORS
+dolar | PARSING ERRORS: doldoldoldododldoodldodldod xxxxxxxxxxxx 
+recibira dolar | PARSING ERRORS: x 
+| PARSING ERRORS: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa 
+dolares quien dolar recibira hoy dolares | PARSING ERRORS: xxxx xxx ezreirecibirx por xx 
+EMPTY LINE
+dolar | PARSING ERRORS: aaaaaaaaaaaaaaaaaaaaa ez 

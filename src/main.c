@@ -11,30 +11,30 @@ int main(int argc, char** argv) {
   }
 
   // Abrimos archivo de diccionario
-  FILE* dictionary_file = fopen(argv[1], "r");
+  FILE* dictionaryFile = fopen(argv[1], "r");
   
   // Cargamos el diccionario
   Dictionary dictionary = dictionary_create();
-  dictionary = dictionary_load_from_file(dictionary, dictionary_file);
+  dictionary = dictionary_load_from_file(dictionary, dictionaryFile);
 
   // Cerramos archivo de diccionario
-  fclose(dictionary_file);
+  fclose(dictionaryFile);
   
-  dictionary_iterate(dictionary);
+  //dictionary_iterate(dictionary); 
 
   // Abrimos el archivo de parseo, y el archivo donde guardaremos el parseo
-  FILE* file_to_parse = fopen(argv[2], "r");
-  FILE* parse_results = fopen(argv[3], "w");
+  FILE* fileToParse = fopen(argv[2], "r");
+  FILE* parseResults = fopen(argv[3], "w");
 
 
   // Parseamos el archivo
-  parse_file(dictionary, file_to_parse, parse_results);
+  parse_file(dictionary, fileToParse, parseResults);
 
 
   // Cerramos los archivos de entrada y salida
   dictionary_destroy(dictionary);
-  fclose(file_to_parse);
-  fclose(parse_results);
+  fclose(fileToParse);
+  fclose(parseResults);
 
   return 0;
 }

@@ -3,6 +3,7 @@
 
 #include "compare_files.h"
 #include <assert.h>
+#include <stdio.h>
 
 // FUNCION TESTEO DE COMPARACION ARCHIVOS
 void test_compare_files();

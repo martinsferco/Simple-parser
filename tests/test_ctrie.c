@@ -2,12 +2,6 @@
 #include <string.h>
 #include "../structures/ctrie.h"
 
-// void test_lower_case_strcpy(); // STATIC
-// void test_ctrie_create_node(); // STATIC 
-// void test_ctrie_exchange_childs(); // STATUC
-// void test_ctrie_split_node(); // STATIC 
-// void test_ctrie_create_bifurcation(); // STATIC
-
 
 #define BUFFER_SIZE 1000
 
@@ -22,6 +16,7 @@ void test_ctrie_create() {
 }
 
 
+
 void test_ctrie_empty() {
 
   CTrie ctrie = ctrie_create();
@@ -34,31 +29,30 @@ void test_ctrie_empty() {
 }
 
 
+
 void test_ctrie_add_string() {
 
   CTrie ctrie = ctrie_create();
 
-
-  FILE* file = fopen("../dictionaries/big_dictionary.txt", "r");
-
+  FILE* file = fopen("dictionaries/big_dictionary.txt", "r");
 
   char word[BUFFER_SIZE];
   
-
-  while (fscanf(file, "%s", word) != EOF) // Insertamos todas las palabras 
+  while (fscanf(file, "%s", word) != EOF) 
     
     ctrie = ctrie_add_string(ctrie, word); 
 
-  fseek(file, 0, SEEK_SET);
+  fseek(file, 0, SEEK_SET); 
 
-
-  while (fscanf(file, "%s", word) != EOF) // Buscamos todas las palabras
+  while (fscanf(file, "%s", word) != EOF)
 
     assert(ctrie_search_string(ctrie, word));
+
 
   ctrie_destroy(ctrie);
   fclose(file);
 }
+
 
 
 void test_ctrie_search_string() {
@@ -75,6 +69,7 @@ void test_ctrie_search_string() {
 
     assert(ctrie_search_string(ctrie, words[i]));
 
+
   assert(! ctrie_search_string(ctrie, "dol"));
   assert(! ctrie_search_string(ctrie, "es"));
   assert(! ctrie_search_string(ctrie, "a"));
@@ -82,6 +77,7 @@ void test_ctrie_search_string() {
 
   ctrie_destroy(ctrie);
 }
+
 
 
 void test_ctrie_node_length() {
@@ -124,13 +120,13 @@ void test_ctrie_node_char() {
   CTrie q_child = ctrie_child(ctrie, word2[0]);
   CTrie r_child = ctrie_child(ctrie, word3[0]);
 
-  for (int i = 0 ; i < strlen(word1) ; i++)
+  for (int i = 0 ; i < (int)strlen(word1) ; i++)
     assert(ctrie_node_char(d_child, i) == word1[i]);
 
-  for (int i = 0 ; i < strlen(word2) ; i++)
+  for (int i = 0 ; i < (int)strlen(word2) ; i++)
     assert(ctrie_node_char(q_child, i) == word2[i]);
 
-  for (int i = 0 ; i < strlen(word3) ; i++)
+  for (int i = 0 ; i < (int)strlen(word3) ; i++)
     assert(ctrie_node_char(r_child, i) == word3[i]);
 
   ctrie_destroy(ctrie);
@@ -164,6 +160,3 @@ void test_ctrie_end_of_word() {
 
   ctrie_destroy(ctrie);
 }
-
-
-// void test_ctrie_child()
