@@ -6,7 +6,7 @@ int main(int argc, char** argv) {
 
   // Chequeamos la cantidad de argumentos
   if (argc != 4) {
-    printf("Cantidad de argumentos incorrecta... Finalizando programa.\n");
+    printf("Wrong number of arguments... Ending program.\n");
     return 1;
   }
 
@@ -15,7 +15,7 @@ int main(int argc, char** argv) {
   
   if (dictionaryFile == NULL) {
 
-    printf("Error al abrir archivo de diccionario... Finalizando programa.\n");
+    printf("Erros opening dictionary file... Ending program.\n");
     return 1;
   }
 
@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 
   if (fileToParse == NULL || parseResults == NULL) {
 
-    printf("Error al abrir archivos de parseo... Finalizando programa.\n");
+    printf("Error opening parse files... Ending program.\n");
     return 1;
   }
 

@@ -27,7 +27,6 @@ TEST_DEPENDENCIES = $(TEST)main_test.c test_parser.o parser.o test_dictionary.o 
 
 
 all: parser test # Compilamos parser y tests y eliminamos archivos objeto
-	@rm *.o
 
 clean: # Eliminamos los parser y test
 	rm parser
