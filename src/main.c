@@ -20,6 +20,8 @@ int main(int argc, char** argv) {
   // Cerramos archivo de diccionario
   fclose(dictionary_file);
   
+  dictionary_iterate(dictionary);
+
   // Abrimos el archivo de parseo, y el archivo donde guardaremos el parseo
   FILE* file_to_parse = fopen(argv[2], "r");
   FILE* parse_results = fopen(argv[3], "w");

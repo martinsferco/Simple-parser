@@ -212,9 +212,11 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
   // CASO 3: La palabra es mas larga que el string del nodo y coincidio en todo 
   else if (i == ctrie->length) {
 
-    CTrie newChild =  ctrie_add_string(ctrie->childs[(int)tolower(string[i]) - OFFSET], string + i);
+    char c = tolower(string[i]);
 
-    ctrie->childs[(int)tolower(string[i]) - OFFSET] = newChild;
+    CTrie newChild =  ctrie_add_string(ctrie_child(ctrie, c), string + i);
+
+    ctrie->childs[(int)c - OFFSET] = newChild;
   }
 
 

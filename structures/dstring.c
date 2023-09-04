@@ -57,7 +57,7 @@ char dstring_read(DString string, int pos) { return string->chars[pos]; }
 
 void dstring_write(DString string, int pos, char c) {
   
-  string->chars[pos] = c;
+  string->chars[pos] = tolower(c);
 }
 
 
@@ -93,7 +93,7 @@ char dstring_append_from_file(DString string, FILE* file) {
 
   dstring_append(string, c);
 
-  return c;
+  return tolower(c);
 }
 
 

@@ -4,7 +4,7 @@
 
 
 #include <stdio.h>
-
+#include <ctype.h>
 
 
 typedef struct _DString* DString; // Tipo DString

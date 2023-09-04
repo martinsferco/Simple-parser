@@ -1,15 +1,15 @@
 #include "dictionary.h"
 
 
-static char get_parse_char(DString string, int pos, int i, FILE* parseFile) {
+static char get_parse_char(DString string, int index, FILE* parseFile) {
 
   char c;
 
-  if (pos < dstring_used(string)) // Ya leimos este parte del archivo
+  if (index < dstring_used(string)) // Ya leimos este parte del archivo
       
-      c = dstring_read(string, pos + i);  
+      c = dstring_read(string, index);  
 
-    else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
+  else // Nunca leimos esta parte del archivo, leemos del archivo y guardamos
 
       c = dstring_append_from_file(string, parseFile);
   
@@ -52,11 +52,11 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
   char c;
 
 
-  c = get_parse_char(string, pos, 0, file);
+  c = get_parse_char(string, pos, file);
   
   for (; c != '\n' && c != EOF && i < length && ctrie_node_char(dictionary, i) == c ; i++)
     
-    c = get_parse_char(string, pos + i + 1, i, file);
+    c = get_parse_char(string, pos + i + 1, file);
 
 
 
