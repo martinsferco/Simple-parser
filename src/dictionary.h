@@ -31,11 +31,6 @@ void dictionary_destroy(Dictionary dictionary);
 //! @return El diccionario con todas las palabras del archivo cargadas.
 Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file);
 
-//? VER SI INCLUIR ESTA FUNCION
-//! @brief Recorre el diccionario, mostrando el contenido de sus nodos.
-//! @param[in] dictionary: Diccionario del cual queremos mostrar su contenido.
-void dictionary_iterate(Dictionary dictionary);
-
 
 //! @brief Busca la maxima longitud de prefijo valido desde una determinada 
 //!        posicion de una cadena, en funcion de un diccionario. 

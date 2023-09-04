@@ -1,16 +1,17 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
+
 #include "dictionary.h"
 #include "../structures/dstring.h"
 #include <stdio.h>
 
 
-typedef struct _ParseFiles ParseFiles; // 
+typedef struct _ParseFiles ParseFiles; 
 
-typedef struct _ParsedLine ParsedLine ; // 
+typedef struct _ParsedLine ParsedLine ; 
 
-typedef enum _ParseResult ParseResult; // 
+typedef enum _ParseResult ParseResult;  
 
 
 //! @brief Realiza el parseo de una linea completa del achivo.

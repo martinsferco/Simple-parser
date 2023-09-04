@@ -69,4 +69,5 @@ CTrie ctrie_child(CTrie ctrie, char c);
 //! @param[out] ctrie: CTrie que queremos destruir.
 void ctrie_destroy(CTrie ctrie);
 
+
 #endif // __CTRIE_H__

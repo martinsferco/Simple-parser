@@ -13,6 +13,12 @@ int main(int argc, char** argv) {
   // Abrimos archivo de diccionario
   FILE* dictionaryFile = fopen(argv[1], "r");
   
+  if (dictionaryFile == NULL) {
+
+    printf("Error al abrir archivo de diccionario... Finalizando programa.\n");
+    return 1;
+  }
+
   // Cargamos el diccionario
   Dictionary dictionary = dictionary_create();
   dictionary = dictionary_load_from_file(dictionary, dictionaryFile);
@@ -20,16 +26,18 @@ int main(int argc, char** argv) {
   // Cerramos archivo de diccionario
   fclose(dictionaryFile);
   
-  //dictionary_iterate(dictionary); 
-
   // Abrimos el archivo de parseo, y el archivo donde guardaremos el parseo
   FILE* fileToParse = fopen(argv[2], "r");
   FILE* parseResults = fopen(argv[3], "w");
 
+  if (fileToParse == NULL || parseResults == NULL) {
+
+    printf("Error al abrir archivos de parseo... Finalizando programa.\n");
+    return 1;
+  }
 
   // Parseamos el archivo
   parse_file(dictionary, fileToParse, parseResults);
-
 
   // Cerramos los archivos de entrada y salida
   dictionary_destroy(dictionary);

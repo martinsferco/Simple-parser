@@ -2,13 +2,11 @@
 #define __DSTRING_H__
 
 
-
 #include <stdio.h>
 #include <ctype.h>
 
 
 typedef struct _DString* DString; // Tipo DString
-
 
 
 //! @brief Crea un DString vacio con cierta capacidad inicial.
@@ -45,7 +43,6 @@ void dstring_write(DString string, int pos, char c);
 void dstring_save_segment(DString string, int start, int length, FILE* destiny);
 
 
-
 //! @brief Nos determina cuan usado esta un DString.
 //! @param[in] string: DString del cual queremos saber cuan usado esta.
 //! @return Numero de casilas que estan siendo usadas.
@@ -72,7 +69,9 @@ char dstring_append_from_file(DString string, FILE* file);
 void dstring_reset(DString string); 
 
 
-
+//! @brief Nos devuelve el ultimo caracter del dstring.
+//! @param[in] string: Dstring del cual queremos conocer su ultimo caracter.
+//! @return El ultimo caracter del dstring.
 char dstring_last(DString string);
 
 #endif // __DSTRING_H__
