@@ -1,5 +1,0 @@
-quien | PARSING ERRORS: DepositeDolaresRecibiraDOLares 
-| PARSING ERRORS: oldoldoldododldoodldodldod 
-quien dolar recibira hoy dolares | PARSING ERRORS: larxxxx xxx ezreirecibirx por xx 
-EMPTY LINE
-dolar | PARSING ERRORS: aaaaaaaaaaaaaaaaaaaaa ez 

@@ -1,5 +1,0 @@
-quien deposite dolares recibira dolares | NO PARSING ERRORS
-| PARSING ERRORS: doldoldoldododldoodldodldod
-quien dolar recibira hoy dolares | PARSING ERRROS: xxx  xx ezreirecibirx por xxx
-EMPTY LINE
-dolar | PARSING ERROS: aaaaaaaaaaaaaaaaaaaaa ez
