@@ -41,7 +41,9 @@ DString dstring_create(int initialCapacity) {
 
   newString->used = 0;
 
-  newString->chars[0] = '\0'; // Colocamos el terminador de cadena
+  // Incluimos terminador de cadena, para que al debuggear, sea
+  // mas facil ver cual es la linea
+  newString->chars[0] = '\0'; 
 
   return newString;
 }
