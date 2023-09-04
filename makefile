@@ -1,16 +1,15 @@
-# Makefile para compilar el TP Simple-parser.
+# Archivo makefile del Simple-Parser.
 
 # Banderas para la compilacion
 ifeq ($(debug),yes)
 	
-	CFLAGS = -std=c99 -Wall -Werror -Wextra -g
+	CFLAGS = -std=c99 -Wall -Werror -Wextra -g 
 
 else
 	
 	CFLAGS = -std=c99 -Wall -Werror -Wextra
 
 endif
-
 
 # Compilador de C
 CC = gcc 
@@ -26,22 +25,22 @@ TEST_DEPENDENCIES = $(TEST)main_test.c test_parser.o parser.o test_dictionary.o 
 													 dictionary.o test_ctrie.o ctrie.o test_dstring.o \
 													 dstring.o compare_files.o 
 
-all: parser test
-	rm *.o
 
-clean:
+all: parser test # Compilamos parser y tests y eliminamos archivos objeto
+	@rm *.o
+
+clean: # Eliminamos los parser y test
 	rm parser
 	rm test
 
-# Compilacion del programa 
-parser: $(PARSER_DEPENDENCIES)
+cleano: 
+	rm *.o
+
+parser: $(PARSER_DEPENDENCIES) # Compilamos el parser
 	$(CC) $^ $(CFLAGS) -o parser
 
-
-# Compilacion de los tests
-test: $(TEST_DEPENDENCIES)
+test: $(TEST_DEPENDENCIES) # Compilamos los tests
 	$(CC) $^ $(CFLAGS) -o test
-
 
 # Archivos objeto generales
 parser.o: $(SRC)parser.c $(SRC)parser.h dictionary.o dstring.o
@@ -74,5 +73,4 @@ compare_files.o: $(TEST)compare_files.c $(TEST)compare_files.h
 	$(CC) -c $< $(CFLAGS)
 
 
-
-.PHONY = clean
+.PHONY = clean,cleano
