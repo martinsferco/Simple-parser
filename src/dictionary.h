@@ -42,4 +42,5 @@ Dictionary dictionary_load_from_file(Dictionary dictionary, FILE* file);
 //! @return La maxima longitud de prefijo desde la posicion indicada.
 int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FILE* file);
 
+
 #endif // __DICTIONARY_H__
