@@ -27,13 +27,6 @@ void dstring_destroy(DString string);
 char dstring_read(DString string, int pos);
 
 
-//! @brief Escribe un caracter en una posicion del DString.
-//! @param[out] string: String en el cual queremos escribir el caracter.
-//! @param[in] pos: Posicion en la cua queremos escribir el caracter.
-//! @param[in] c: Caracter que queremos escribir.
-void dstring_write(DString string, int pos, char c);
-
-
 //! @brief Escribe en el archivo un segmento del dstring.
 //! @param[in] string: Dstring del cual iremos leyendo los caracteres.
 //! @param[in] start: Inicio del segmento que vamos a leer.

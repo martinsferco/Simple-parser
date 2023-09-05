@@ -6,3 +6,4 @@ recibira dolar | PARSING ERRORS: x
 dolares quien dolar recibira hoy dolares | PARSING ERRORS: xxxx xxx ezreirecibirx por xx 
 EMPTY LINE
 dolar | PARSING ERRORS: aaaaaaaaaaaaaaaaaaaaa ez 
+recibira | PARSING ERRORS: xxx xxxxxxxxxxxxxxxdolaxdola 

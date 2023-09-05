@@ -78,9 +78,8 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   while (continue_parsing(line.string, i)) { // Recorremos hasta llegar a fin de linea
     
-    // Leemos un caracter para evitar llegar al final de linea al ver el maximo prefijo
+    // Leemos un caracter para evitar llegar al terminado de linea
     if (dstring_last(line.string) != '\n') 
-      
       dstring_append_from_file(line.string, files.parseFile);
     
     // Calculamos el prefijo mas largo desde la actual posicion 
