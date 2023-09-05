@@ -67,4 +67,5 @@ void dstring_reset(DString string);
 //! @return El ultimo caracter del dstring.
 char dstring_last(DString string);
 
+
 #endif // __DSTRING_H__

@@ -78,7 +78,7 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   while (continue_parsing(line.string, i)) { // Recorremos hasta llegar a fin de linea
     
-    // Leemos un caracter para evitar llegar al terminado de linea
+    // Leemos un caracter para evitar llegar al terminador de cadena
     if (dstring_last(line.string) != '\n') 
       dstring_append_from_file(line.string, files.parseFile);
     
@@ -115,7 +115,7 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
 void parse_file(Dictionary dictionary, FILE* parseFile, FILE* resultsFile) {
 
-  // Almacenamos la lniea leida y los errores de parseo
+  // Almacenamos la linea leida y los errores de parseo
   ParsedLine line;
   line.string = dstring_create(INITIAL_SIZE);
   line.parsingErrors = dstring_create(INITIAL_SIZE);
@@ -131,20 +131,21 @@ void parse_file(Dictionary dictionary, FILE* parseFile, FILE* resultsFile) {
   
     result = parse_line(dictionary, line, files); // Parseamos linea
     
-
-    if (result == EMPTY_LINE) 
+    if (result == EMPTY_LINE) // Parseamos linea vacia
       
       fprintf(resultsFile, "%s", "EMPTY LINE\n");
 
-    else if (result == NON_EMPTY_LINE)
+    else if (result == NON_EMPTY_LINE) // Imprimimos los errores del parseo
     
       save_parsing_errors(line.parsingErrors, files.resultsFile);
+
 
     // Reseteamos la linea y los errores
     dstring_reset(line.string);  
     dstring_reset(line.parsingErrors);
   }
 
+  // Destruimos la linea y los errores
   dstring_destroy(line.string);
   dstring_destroy(line.parsingErrors);
 }

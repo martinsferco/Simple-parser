@@ -24,6 +24,8 @@ void test_parse_file() {
   fseek(resultsFile, 0, SEEK_SET);
 
   assert(compare_files(resultsFile, expectedResultsFile));
-}
 
-// void test_save_parsing_errors(); // STATIC
+  fclose(resultsFile);
+  fclose(expectedResultsFile);
+  dictionary_destroy(dictionary);
+}

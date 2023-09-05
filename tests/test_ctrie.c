@@ -133,6 +133,7 @@ void test_ctrie_node_char() {
 }
 
 
+
 void test_ctrie_end_of_word() {
 
   CTrie ctrie = ctrie_create();

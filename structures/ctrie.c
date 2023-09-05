@@ -245,6 +245,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
 }
 
 
+
 int ctrie_search_string(CTrie ctrie, char* string) { 
 
   if (ctrie == NULL) return 0;
