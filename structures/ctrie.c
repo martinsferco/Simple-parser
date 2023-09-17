@@ -22,7 +22,7 @@ struct CTrieNode { // Estructura de un nodo del CTrie
   unsigned int startMemoryBlock; // Vemos si en el nodo, 'string' apunta al 
                                  // comienzo de un bloque de memoria 
 
-  struct CTrieNode** childs; // Hijos del nodo
+  struct CTrieNode** children; // Hijos del nodo
 };
 
 
@@ -76,10 +76,10 @@ static CTrie ctrie_create_node(char* string, int length, CopyOption option) {
   }
   
   // Pedimos memoria para todos los hijos
-  newNode->childs = malloc(sizeof(CTrie) * ALPHABET_SIZE);
+  newNode->children = malloc(sizeof(CTrie) * ALPHABET_SIZE);
 
   // Inicializamos todos sus hijos a NULL
-  for (int i = 0 ; i < ALPHABET_SIZE; newNode->childs[i++] = ctrie_create());
+  for (int i = 0 ; i < ALPHABET_SIZE; newNode->children[i++] = ctrie_create());
 
   return newNode;
 }
@@ -90,11 +90,11 @@ static CTrie ctrie_create_node(char* string, int length, CopyOption option) {
 //         y visceversa.
 //! @param[out] ctrie1: CTrie que recibira los hijos de ctri2.
 //! @param[out] ctrie2: CTrie que recibira los hijos de ctri1.
-static void ctrie_exchange_childs(CTrie ctrie1, CTrie ctrie2) {
+static void ctrie_exchange_children(CTrie ctrie1, CTrie ctrie2) {
 
-  CTrie* childs = ctrie1->childs;
-  ctrie1->childs = ctrie2->childs;
-  ctrie2->childs = childs;
+  CTrie* children = ctrie1->children;
+  ctrie1->children = ctrie2->children;
+  ctrie2->children = children;
 }
 
 
@@ -119,11 +119,11 @@ static CTrie ctrie_split_node(CTrie ctrie, int index) {
   ctrie->endOfWord = 1; // El nodo actual pasa a ser un fin de palabra
 
 
-  ctrie_exchange_childs(newNode, ctrie); // Intercambiamos hijos
+  ctrie_exchange_children(newNode, ctrie); // Intercambiamos hijos
   
 
   // Ponems como hijo del nodo actual, a la extension que creamos
-  ctrie->childs[(int)ctrie->string[index] - OFFSET] = newNode; 
+  ctrie->children[(int)ctrie->string[index] - OFFSET] = newNode; 
 
   return ctrie;
 }
@@ -156,7 +156,7 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 
   // Los hijos del nodo resultante de la bifuracion del nodo actual, seran los
   // hijos del nodo actual. 
-  ctrie_exchange_childs(stringPartitionNode, ctrie);
+  ctrie_exchange_children(stringPartitionNode, ctrie);
 
   // Creamos el nodo donde almacenaremos la parte del string a insertar, que no 
   // coincidio con el string del nodo
@@ -165,8 +165,8 @@ static CTrie ctrie_create_bifurcation(CTrie ctrie, char* string, int index) {
 
 
   // A los dos nuevos nodos, los agregamos como hijos del nodo actual
-  ctrie->childs[(int)ctrie->string[index] - OFFSET] = stringPartitionNode;
-  ctrie->childs[tolower(string[index]) - OFFSET] = newStringNode;
+  ctrie->children[(int)ctrie->string[index] - OFFSET] = stringPartitionNode;
+  ctrie->children[tolower(string[index]) - OFFSET] = newStringNode;
 
   return ctrie;
 }
@@ -232,7 +232,7 @@ CTrie ctrie_add_string(CTrie ctrie, char* string) {
     // que estamos leyendo del string.
     CTrie newChild =  ctrie_add_string(ctrie_child(ctrie, c), string + i);
 
-    ctrie->childs[(int)c - OFFSET] = newChild;
+    ctrie->children[(int)c - OFFSET] = newChild;
   }
 
   // CASO 4: La palabra no coincide en algun caracter con el string del nodo 
@@ -260,7 +260,7 @@ int ctrie_search_string(CTrie ctrie, char* string) {
   // Seguimos buscando el otro pedazo del string en los hijos del CTrie
   else if (i == ctrie->length) { 
     
-    CTrie child = ctrie->childs[(int)tolower(string[i]) - OFFSET];
+    CTrie child = ctrie->children[(int)tolower(string[i]) - OFFSET];
 
     return ctrie_search_string(child, string + i);
   }
@@ -291,7 +291,7 @@ void ctrie_iterate(CTrie ctrie) {
 
   for (int i = 0 ; i < ALPHABET_SIZE ; i++) // Visitamos los hijos
 
-    ctrie_iterate(ctrie->childs[i]);
+    ctrie_iterate(ctrie->children[i]);
 }
 
 
@@ -308,7 +308,7 @@ inline int ctrie_end_of_word(CTrie ctrie) { return ctrie->endOfWord; }
 
 
 
-inline CTrie ctrie_child(CTrie ctrie, char c) { return ctrie->childs[(int)c - OFFSET];}
+inline CTrie ctrie_child(CTrie ctrie, char c) { return ctrie->children[(int)c - OFFSET];}
 
 
 
@@ -319,10 +319,10 @@ void ctrie_destroy(CTrie ctrie) {
     for (int i = 0 ; i < ALPHABET_SIZE ; i++)
       
       // Liberamos cada uno de los hijos
-      if (! ctrie_empty(ctrie->childs[i])) ctrie_destroy(ctrie->childs[i]);
+      if (! ctrie_empty(ctrie->children[i])) ctrie_destroy(ctrie->children[i]);
       
     // Liberamos el arreglo de hijos
-    free(ctrie->childs);
+    free(ctrie->children);
 
     // Liberamos la cadena, solo si estamos en el comienzo del bloque de memoria
     if (ctrie->startMemoryBlock) free(ctrie->string);   

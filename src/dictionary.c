@@ -83,15 +83,15 @@ int dictionary_largest_prefix(Dictionary dictionary, DString string, int pos, FI
     Dictionary child = ctrie_child(dictionary, c); 
 
     // Nos guardamos la longitud del nodo, si es fin de palabra
-    int prefix_length = ctrie_end_of_word(dictionary) ? length : 0;
+    int prefixLength = ctrie_end_of_word(dictionary) ? length : 0;
 
     // Vemos si podemos encontrar algun prefijo, cuando seguimos recorriendo
     // el diccionario
-    int prefix_child_length = child ? dictionary_largest_prefix(child, string, pos + i, file) : 0;
+    int prefixChildLength = child ? dictionary_largest_prefix(child, string, pos + i, file) : 0;
 
     // Si encontramos un prefijo nuevo mas largo, devolvemos dicha distancia,
     // si no, devolvemos el largo del prefijo actual
-    return prefix_child_length ? length + prefix_child_length : prefix_length;
+    return prefixChildLength ? length + prefixChildLength : prefixLength;
   }
   
   // Cualquier otro caso, no se encuentra otro prefijo

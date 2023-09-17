@@ -71,7 +71,7 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
 
   if (c == '\n') return EMPTY_LINE; // No llegamos al final del archivo, pero es linea vacia
 
-  int wordFinded = 1;
+  int foundWord = 1;
 
 
   int i = 0;
@@ -92,20 +92,20 @@ ParseResult parse_line(Dictionary dictionary, ParsedLine line, ParseFiles files)
       
       i += length; // Nos movemos para buscar la proxima palabra
       
-      wordFinded = 1;
+      foundWord = 1;
     }
     
     else { // No encontramos prefijo, nos movemos uno para delante
         
       // Separamos los grupos de errores
-      if (wordFinded) dstring_append(line.parsingErrors, ' ');
+      if (foundWord) dstring_append(line.parsingErrors, ' ');
 
       // Agregamos el error
       dstring_append(line.parsingErrors, dstring_read(line.string, i));      
       
       i++; // Nos movemos un caracter
 
-      wordFinded = 0;
+      foundWord = 0;
     }
   }
 
